@@ -1,0 +1,115 @@
+数据库：
+
+CREATE TABLE `top_user` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `nick` varchar(60) NOT NULL,
+  `isv_name` varchar(255) NOT NULL DEFAULT '' COMMENT 'isv名',
+  `mobile` varchar(20) NOT NULL COMMENT '联系电话',
+  `tel` varchar(20) NOT NULL,
+  `user_type` enum('0','1') NOT NULL DEFAULT '0' COMMENT '0是isv，1是小二',
+  `pwd` char(32) NOT NULL COMMENT '密码',
+  `is_delete` enum('0','1') NOT NULL DEFAULT '0' COMMENT '是否已经删除',
+  `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `nick` (`nick`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表'
+
+CREATE TABLE `top_user_app` (
+  `app_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL COMMENT 'isv',
+  `app_name` varchar(255) NOT NULL COMMENT '应用名称',
+  `service_code` varchar(60) NOT NULL COMMENT '淘宝应用唯一标识',
+  `img` varchar(255) NOT NULL COMMENT '列表页图标',
+  `detail_url` varchar(255) NOT NULL COMMENT '详细页url',
+  `cat_map_id` int(10) NOT NULL DEFAULT '0' COMMENT '分类id',
+  `score` float(7,1) NOT NULL DEFAULT '0.0' COMMENT '评分',
+  `comment` int(10) NOT NULL DEFAULT '0' COMMENT '有效评价',
+  `free_num` int(10) NOT NULL DEFAULT '0' COMMENT '免费使用人数',
+  `pay_num` int(10) NOT NULL DEFAULT '0' COMMENT '付费使用人数',
+  `total_num` int(10) NOT NULL DEFAULT '0' COMMENT '总使用人数,免费与付费的和',
+  `browse_num` int(10) NOT NULL DEFAULT '0' COMMENT '30天浏览次数',
+  `yiyong` float(7,2) NOT NULL DEFAULT '0.00' COMMENT '易用性高于或低于百分之几,负表示低于',
+  `taidu` float(7,2) NOT NULL DEFAULT '0.00' COMMENT '服务态度高于或低于百分之几,负表示低于',
+  `wending` float(7,2) NOT NULL DEFAULT '0.00' COMMENT '稳定性高于或低于百分之几,负表示低于',
+  `desc` varchar(500) NOT NULL DEFAULT '' COMMENT '简介',
+  `is_delete` enum('0','1') NOT NULL DEFAULT '0' COMMENT '是否删除',
+  `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`app_id`),
+  UNIQUE KEY `service_code` (`service_code`),
+  KEY `user_id` (`user_id`),
+  KEY `tab_cat_id` (`cat_map_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='isv应用列表'
+
+CREATE TABLE `top_app_cat` (
+  `cat_map_id` int(11) NOT NULL,
+  `cat_name` varchar(60) NOT NULL COMMENT '分类名称',
+  `parent_id` int(11) NOT NULL DEFAULT '0' COMMENT '父级分类id',
+  PRIMARY KEY (`cat_map_id`),
+  KEY `parent_id` (`parent_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='isv应用分类'
+
+CREATE TABLE `top_ivs_trace` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `time` date NOT NULL COMMENT '统计日期',
+  `app_name` varchar(255) NOT NULL COMMENT '应用名称',
+  `service_code` varchar(60) NOT NULL COMMENT '淘宝应用唯一标识',
+  `cat_map_id` int(10) NOT NULL DEFAULT '0' COMMENT '分类id,可删除',
+  `score` float(7,1) NOT NULL DEFAULT '0.0' COMMENT '评分',
+  `comment` int(10) NOT NULL DEFAULT '0' COMMENT '有效评价',
+  `comment_new` int(10) NOT NULL DEFAULT '0' COMMENT '新增有效评价',
+  `free_num` int(10) NOT NULL DEFAULT '0' COMMENT '免费使用人数',
+  `free_num_new` int(10) NOT NULL DEFAULT '0' COMMENT '新增免费使用人数',
+  `pay_num` int(10) NOT NULL DEFAULT '0' COMMENT '付费使用人数',
+  `pay_num_new` int(10) NOT NULL DEFAULT '0' COMMENT '新增付费使用人数',
+  `total_num` int(10) NOT NULL DEFAULT '0' COMMENT '总使用人数,免费与付费的和',
+  `browse_num` int(10) NOT NULL DEFAULT '0' COMMENT '30天浏览次数',
+  `browse_num_new` int(10) NOT NULL DEFAULT '0' COMMENT '新增30天浏览次数',
+  `yiyong` float(7,2) NOT NULL DEFAULT '0.00' COMMENT '易用性高于或低于百分之几,负表示低于',
+  `taidu` float(7,2) NOT NULL DEFAULT '0.00' COMMENT '服务态度高于或低于百分之几,负表示低于',
+  `wending` float(7,2) NOT NULL DEFAULT '0.00' COMMENT '稳定性高于或低于百分之几,负表示低于',
+  `source_modified` datetime DEFAULT NULL COMMENT 'top_user_app表的modified',
+  `created` datetime DEFAULT NULL COMMENT '创建记录时间',
+  `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `service_code` (`service_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='isv每日数据跟踪';
+
+`top_app_cat`数据
+50042461	数据分析	0
+50042470	店铺管理	0
+50042481	批量处理工具	50042470
+50042483	会员管理	50042470
+50042485	进销存软件	50042470
+50042486	电子商务(ERP)软件	50042470
+50042487	分销系统（DRP）	50042470
+50042488	店铺推广	50047508
+50042506	数据咨询服务	50042461
+50042507	数据分析工具	50042461
+50047508	营销推广	0
+50072282	旺铺	50105726
+50096841	会员营销	50047508
+50099152	行业店铺插件	50105726
+50105726	店铺基础服务	0
+50105734	促销工具	50047508
+50105735	互动营销	50047508
+50105736	营销模板	50047508
+50105775	客服绩效管理	0
+50105819	管理/It咨询	50042470
+50107212	直通车优化	50047508
+50108445	店铺基础运营分析 	50042507
+50108446	商品优化分析 	50042507
+50108447	营销效果分析 	50042507
+50108448	买家分析 	50042507
+50108449	订单分析 	50042507
+50108450	供应链分析 	50042507
+50108451	售后/运营支撑分析	50042507
+50108452	需求挖掘 	50042507
+50330033	员工管理	50042470
+50354038	财务管理	50042470
+
+文件清单：
+D:\APMServ5.2.6\www\htdocs\testzh\cron\IvsCron.php
+D:\APMServ5.2.6\www\htdocs\testzh\library\Spider.php
+D:\APMServ5.2.6\www\htdocs\testzh\models\Admin\IsvRule.php
+D:\APMServ5.2.6\www\htdocs\testzh\models\Admin\TopUser.php
+D:\APMServ5.2.6\www\htdocs\testzh\models\Admin\TopUserApp.php

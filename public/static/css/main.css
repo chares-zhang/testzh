@@ -1,0 +1,44 @@
+/**  @base  **/
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, legend, button, input, textarea, p, blockquote, th, td {
+    margin: 0;
+    padding: 0;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+img {
+    border: 0 none;
+}
+ol, ul {
+    list-style: none outside none;
+}
+a {
+    text-decoration: none;
+	color:#34495E;
+}
+a:focus {
+    outline: medium none;
+}
+input,textarea,select,button {
+	outline:none;
+	resize:none
+}
+.clear{
+	clear:both;
+}
+.number{
+	font-family:"Arial";
+}
+
+
+
+
+/**  #footer  **/
+#footer{
+	margin:50px auto 0 auto;
+	text-align:center;
+	border-top:1px solid #E5E5E5;
+	padding:30px 0;
+	background:#FFFFFF;
+}
