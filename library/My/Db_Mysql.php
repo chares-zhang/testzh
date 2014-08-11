@@ -1,4 +1,9 @@
 <?php
+/**
+ * mysql 类，暂时不用了
+ * @author chares
+ *
+ */
 class Db
 {
 	protected $db;

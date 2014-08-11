@@ -50,7 +50,7 @@ function myAutoload($className)
 {
 	if(file_exists(LIBRARY_PATH . '/'. $className . '.php')){
 		include LIBRARY_PATH . '/'. $className . '.php';
-	}else{//controllers & models 模块化
+	}else{
 		$classFile = str_replace(' ', DIRECTORY_SEPARATOR, ucwords(str_replace('_', ' ', $className)));
 		include $classFile . '.php';
 	} 
@@ -124,7 +124,6 @@ function myErrorHandler($errno, $errstr, $errfile, $errline){
             break;
     }
     $errorMessage .= ": {$errstr}  in {$errfile} on line {$errline}";
-	echo $errorMessage;exit;
     throw new Exception($errorMessage);
 
 }

@@ -13,8 +13,8 @@ class BaseController extends AbstractController
 	public function __construct()
 	{
 		parent::__construct();
-		$this->staticurl = Common::getConfigUrl('staticurl');
-		$this->webhost = Common::getConfigUrl('webhost');
+		$this->staticurl = Common::getConfigUrl('static_url');
+		$this->webhost = Common::getConfigUrl('base_url');
 		//$uid = $this->_getUser();
 		//$where = "uid = '{$uid}'";
 		//$this->userRow = Common::M('Core_User')->getRow($where,"*",$uid);

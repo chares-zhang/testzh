@@ -21,7 +21,7 @@ abstract class AbstractController {
 		$this->controller = Dispatcher::getInstance()->getController();
 		$this->action = Dispatcher::getInstance()->getAction();
 		$this->config = Common::getConfig();
-		$this->staticurl = Common::getConfigUrl('staticurl');
+		$this->staticurl = Common::getConfigUrl('static_url');
 	}
 	
 	/**

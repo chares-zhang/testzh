@@ -4,6 +4,7 @@ class Core_IndexController extends BaseController
 {
 	public function indexAction() 
 	{
+		echo 'index';exit;
 		//echo "uid:".$this->uid;
 		$userRow = $this->userRow;
 

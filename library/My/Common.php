@@ -8,6 +8,7 @@
 
 class Common{
 	private static $_config = array();
+	static private $_staticModel;
 
     static public function getConfig($filename = 'config' )
     {
@@ -36,21 +37,37 @@ class Common{
 		return $db[$shardId];
 	}
 	
-	public static function M($model)
+	public static function M($modelName)
 	{
-		static $staticModel;
-		if (empty($staticModel[$model])) {
-			if(class_exists($model)){
-				$staticModel[$model] = new $model();
+		$modelName = trim($modelName);
+		if (strpos($modelName, '/')===false) {
+			$modelName = ucfirst($modelName);
+		}else{
+			$modelArr = explode('/', trim($modelName));
+			$modelArr[0] = $modelArr[0] . '_Model';
+			$modelName = str_replace(' ', '_',ucwords((implode(' ',$modelArr))));
+		}
+		return self::requireModel($modelName);
+	}
+	
+	/**
+	 * 引入类
+	 * @param unknown $modelName
+	 */
+	public static function requireModel($modelName)
+	{
+		if(empty(self::$_staticModel[$modelName])){
+			if(class_exists($modelName)){
+				self::$_staticModel[$modelName] = new $modelName();
 			}
 		}
-		if(empty($staticModel[$model])){
-			echo "$model class not found ";
+		if(empty(self::$_staticModel[$modelName])){
+			echo "$modelName class not found ";
 			exit;
 		}
-		return $staticModel[$model];
+		return self::$_staticModel[$modelName];
 	}
-
+	
 	public static function computeTableId($uid)
 	{
 		$config = self::getConfig('config');
@@ -113,10 +130,10 @@ class Common{
 	* 获取配置文件中的各种url,默认取webhost
 	*
 	*/
-	public static function getConfigUrl($urlKey='webhost')
+	public static function getConfigUrl($urlKey='base_url')
 	{
 		$config = self::getConfig();
-		return $config[$urlKey];
+		return $config['main_info'][$urlKey];
 	}
 
 	
@@ -182,5 +199,17 @@ class Common{
 		}
 	}
 	
+	public static function getDefaultRoute()
+	{
+		$config = self::getConfig();
+		if (!isset($config['main_info'])) {
+			throw new Exception("config error:main_info not exist.");
+		}
+		if (!isset($config['main_info']['default_route'])) {
+			throw new Exception("config error:main_info。default_route not exist.");
+		}
+		return $config['main_info']['default_route'];
+		
+	}
 }
 
