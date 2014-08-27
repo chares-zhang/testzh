@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * 框架相关的公用函数
  * @category   library
  * @author     chares zhang <linchare@gmail.com>
  * @version    $Id: Common.php 1 2012-09-09 16:14:39Z php $
@@ -22,22 +22,108 @@ class Common{
         return self::$_config[$filename];
     }
     
-	public static function getDb($shardId = 0)
-	{
-		static $db = array();
-		static $dbConfig = array();
-		if(empty($db[$shardId]))
-		{
-			if(empty($dbConfig)){
-				$config = self::getConfig('config');
-				$dbConfig = $config['db'][$shardId];
-			}
-			$db[$shardId] = new Db($dbConfig);
-		}
-		return $db[$shardId];
-	}
-	
-	public static function M($modelName)
+    /**
+     * 连接数据库
+     * @param string $module
+     * @param int $shopId
+     * @param bool $isCommon (true,连公共集群;false根据shopId来获取集群)
+     * @return Ambigous <Hlg_Db>
+     */
+    public static function getDb($module,$uid,$isCommon=false)
+    {
+    	static $db = array();
+    	static $dbConf = array();
+    	static $dbInfo = array();
+    
+    	$dbGroup = self::getDbGroup();
+    	$dbInstance = self::getDbInstance($module, $uid, $isCommon);
+    	$dbkey = $dbGroup . '_' . $dbInstance . '_' .$module;
+    
+    	//10分钟没释放的连接就释放掉
+    	$expired = time() - 600;
+    	if (!empty($db) && is_array($db)) {
+    		foreach($db as $k=>$subDb){
+    			if ($subDb['time'] < $expired) {
+    				$subDb['handler'] = null;
+    				unset($db[$k]);
+    			}
+    		}
+    	}
+    	if(empty($db[$dbkey])){
+    		if(empty($dbConf)){
+    			$dbConf = self::getConfig('db_conf');
+    		}
+    		if(empty($dbInfo)){
+    			$dbInfo = self::getConfig('db_info');
+    		}
+    			
+    		if (!isset($dbConf[$dbGroup]['module_dbname'][$module])) {
+    			throw new Exception('module_dbname:'.$module.' not exist');
+    		}
+    		$dbName = $dbConf[$dbGroup]['module_dbname'][$module];//根据模块名获取库名
+    			
+    		$dbInfoArr = $dbInfo[$dbInstance];//获取实例信息.
+    		$dbInfoArr['dbname'] = $dbName;
+    		$db[$dbkey]['handler'] = new Db($dbInfoArr);
+    	}
+    
+    	$db[$dbkey]['time'] = time();
+    	return $db[$dbkey]['handler'];
+    }
+    
+    /**
+     * 获取数据库分组信息.
+     */
+    public static function getDbGroup()
+    {
+    	static $config = array();
+
+    	if(empty($config)){
+    		$config = self::getConfig('config');
+    	}
+    
+    	$dbGroup = '';
+    	if (isset($config['plat_info']['db_group'])) {
+    		$dbGroup = $config['plat_info']['db_group'];
+    	}
+    	if (empty($dbGroup)) {
+    		throw new Exception('db_group not exist');
+    	}
+    	return $dbGroup;
+    }
+    
+    /**
+     * @TODO 完成对应关系
+     * 根据模块名$module,$shopId获取对应的实例.
+     */
+    public static function getDbInstance($module, $uid, $isCommon=false)
+    {
+    	$dbGroup = self::getDbGroup();
+    	if(true === $isCommon){//如果$isCommon===true,则返回公共库的集群id
+    		$instanceId = 'sharding_id_common';//暂时不启用公共集群，全部配置到旧集群.
+    	}else{
+    		$instanceId = self::getClustersId($uid);
+    	}
+    	$dbConf = self::getConfig('db_conf');
+    	if (!isset($dbConf[$dbGroup])) {
+    		throw new Exception('dbGroup:'.$dbGroup.' not exist');
+    	}
+    	if (!isset($dbConf[$dbGroup]['module_instance'][$instanceId][$module])) {
+    		throw new Exception('module_instance:'.$module.' not exist');
+    	}
+    	return $dbConf[$dbGroup]['module_instance'][$instanceId][$module];
+    }
+    
+    /**
+     * @TODO 根据uid获取分库的shardingId.
+     * shardingId对应于config.php中的model_instance的键.eg:0,1,2
+     */
+    public static function getClustersId($shopId)
+    {
+    	return 'sharding_id_0';
+    }
+       
+	public static function getModel($modelName)
 	{
 		$modelName = trim($modelName);
 		if (strpos($modelName, '/')===false) {
@@ -168,13 +254,6 @@ class Common{
 		}
 	}
 	
-	//获取webhostUrl
-	public static function getWebhostUrl()
-	{
-		$config = self::getConfig();
-		return $config['webhost'];
-	}
-
 	//获取AppKey
 	public static function getAppKey()
 	{

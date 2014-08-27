@@ -1,14 +1,10 @@
 <?php
 /**
- * 用户模块逻辑
+ * 用户表相关逻辑
  * @author chares
  *
  */
-class Core_Model_User extends Core_Model_Base_User 
+class Core_Model_User extends Core_Model_Base_User
 {
-
 	
-	
-
-
 }

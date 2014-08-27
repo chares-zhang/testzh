@@ -1,12 +1,6 @@
 <?php
 
 abstract class AbstractModel {
-// 	protected $_config;
-// 	protected $_db;
-// 	protected $_name;
-// 	protected $_isHoriz;//是否水平分表
-// 	protected $_isSharding;//是否分库
-
 	/**
 	 * 数据库连接
 	 */
@@ -30,47 +24,42 @@ abstract class AbstractModel {
 	/**
 	 * 分表数量,若数量大于1,则表示需要分表,$_tableDivType='UID'时有用.
 	 */
-	protected $_table_div;
+	protected $_tableDiv;
 	
 	/**
 	 * 分表依据,只支持按 UID,MONTH,WEEK 分表,默认UID
 	 */
 	protected $_tableDivType = 'UID';
 	
-	protected $_tableDivKey;
-	
-	protected $_data;
-	
 	public function __construct() 
 	{
-// 		$this->_config = Common::getConfig('config');
 	}
 
 	/*
-	 * 根据$shopId找到对应的集群
-	* @param $shopId
+	 * 根据$uid找到对应的集群
+	* @param $uid
 	*/
-	public function db($shopId){
+	public function db($uid){
 		if($this->_isCommon){//是否公共集群,true则是
-			$this->_db = Common::getDb($this->_module,$shopId,true);
+			$this->_db = Common::getDb($this->_module,$uid,true);
 		}else{
-			$this->_db = Common::getDb($this->_module,$shopId);
+			$this->_db = Common::getDb($this->_module,$uid);
 		}
 		return $this->_db;
 	}
 	
 	/**
 	 * 获取表名
-	 * 若需要分表,则在model中设置$_table_div分表数量
+	 * 若需要分表,则在model中设置$_tableDiv分表数量
 	 * 分表算法：取余并补齐4位数.
 	 */
 	public function getMainTable($divKey=null){
 		$divKey = $this->getDivKey($divKey);
 		switch($this->_tableDivType){
 		    case 'UID':
-		    	if(isset($this->_table_div) && $this->_table_div > 1){
+		    	if(isset($this->_tableDiv) && $this->_tableDiv > 1){
 		    		if($divKey !== null){
-		    			return $this->_name . '_' . str_pad($divKey % $this->_table_div, 4, '0', STR_PAD_LEFT);
+		    			return $this->_name . '_' . str_pad($divKey % $this->_tableDiv, 4, '0', STR_PAD_LEFT);
 		    		}
 		    	}
 		    	break;
@@ -103,7 +92,7 @@ abstract class AbstractModel {
 	 */
 	public function getDivKey($divKey){
 		if($this->_tableDivType == "UID"){
-			return ($divKey !== null) ? $divKey : Hlg::getShopId();
+			return ($divKey !== null) ? $divKey : My::getUid();
 		}else{
 			return ($divKey !== null) ? $divKey : date("Ymd");
 		}
@@ -112,7 +101,7 @@ abstract class AbstractModel {
 	/**
 	 * 获取多条记录
 	 * @param array $params
-	 * @param int $shopId
+	 * @param int $uid
 	 * @return multitype:
 	 */
 	public function fetchItems($params,$divKey=null){
@@ -166,7 +155,7 @@ abstract class AbstractModel {
 	 * @param array $params
 	 * @param int $pageSize  每页几条数据
 	 * @param int $pageId	页数,从第0页开始.
-	 * @param int $shopId
+	 * @param int $uid
 	 * @return array $result = array('total_result'=>$totalResult,'data'=>$items);
 	 */
 	public function fetchPageItems($params,$pageSize,$pageId,$divKey=null)
@@ -226,7 +215,7 @@ abstract class AbstractModel {
 	 * @param $sql
 	 * @param int $pageSize  每页几条数据
 	 * @param int $pageId	页数,从第0页开始.
-	 * @param int $shopId
+	 * @param int $uid
 	 * @return array $result = array('total_result'=>$totalResult,'data'=>$items);
 	 */
 	public function fetchJoinPageItems($sqlParams,$pageSize,$pageId,$divKey=null){
@@ -273,7 +262,7 @@ abstract class AbstractModel {
 	/**
 	 * 获取单条记录
 	 * @param array $params
-	 * @param int $shopId
+	 * @param int $uid
 	 * @return mixed
 	 */
 	public function fetchItem($params,$divKey=null){
@@ -316,7 +305,7 @@ abstract class AbstractModel {
 	 * 简易获取单条记录
 	 * @param array or string $value
 	 * @param array or string $field
-	 * @param int $shopId 用于取到正确的分库分表
+	 * @param int $uid 用于取到正确的分库分表
 	 * @return mixed
 	 */
 	public function load($value,$field=null,$divKey=null)
@@ -369,7 +358,7 @@ abstract class AbstractModel {
 	/**
 	 * 获取第一行的第一列数据
 	 * @param string $sql
-	 * @param int $shopId
+	 * @param int $uid
 	 * @return unknown
 	 */
 	public function fetchOne($sqlParams,$divKey=null)
@@ -402,7 +391,7 @@ abstract class AbstractModel {
 	/**
 	 * 获取第一列数据
 	 * @param string $sql
-	 * @param int $shopId
+	 * @param int $uid
 	 * @return unknown
 	 */
 	public function fetchCol($sqlParams,$divKey=null)
@@ -594,7 +583,7 @@ abstract class AbstractModel {
 	/**
 	 * 直接运行sql
 	 * @param string $sql
-	 * @param int $shopId
+	 * @param int $uid
 	 */
 	public function query($sqlParams,$divKey=null){
 		$divKey = $this->getDivKey($divKey);
@@ -681,7 +670,7 @@ abstract class AbstractModel {
 	public function checkTableNotExists($error,$divKey = null)
 	{
 		if($error[0] == "42S02" && $this->_tableDivType != 'UID'){
-			if(!is_numeric($this->_table_div)){
+			if(!is_numeric($this->_tableDiv)){
 				return $this->db($divKey)->query("CREATE TABLE IF NOT EXISTS ".$this->getMainTable($divKey)." LIKE ".$this->_name);
 			}
 		}
@@ -707,9 +696,12 @@ abstract class AbstractModel {
 	 * 构造sql数组，返回的键sql为where模板，bind为where绑定参数
 	 * 
 	 */
-	public static function createSql($where, $bind=array())
+	public static function createSql($sql, $bind=array())
 	{
-	
+		return array(
+			'sql_str' => $sql,
+			'bind' => $bind
+		);
 	}
 	
 	

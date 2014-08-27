@@ -5,8 +5,10 @@ class Core_IndexController extends Core_BaseController
 	public function indexAction() 
 	{
 		echo 'index';
-		$userM = Common::M('core/user');
-		$userM->fetchItem();
+		$uid = 888888;
+		$userM = Common::getModel('core/user');
+		$userRow = $userM->getUserItem($uid);
+		var_dump($userRow);exit;
 		exit;
 	}
 	
