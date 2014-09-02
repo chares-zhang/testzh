@@ -3,5 +3,5 @@
 $allows = array(
   'indexController' => array('run',),
 );
-
+var_dump($allows);exit;
 ?>

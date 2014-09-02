@@ -43,19 +43,19 @@ class Dispatcher {
     	$requestUri = $this->getRequestUri();
     	$path = $requestUri?explode('/',trim($requestUri,'/')):array();
     	
-    	if(!empty($path[0])) {
+    	if(isset($path[0]) && !empty($path[0])) {
     		$module = $path[0];
     	} else {
     		$module = $defaultRoute[0];
     	}
     	
-    	if(!empty($path[1])) {
+    	if(isset($path[1]) && !empty($path[1])) {
     		$controller = $path[1];
     	} else {
     		$controller = $defaultRoute[1];
     	}
     	
-    	if(!empty($path[2])) {
+    	if(isset($path[2]) && !empty($path[2])) {
     		$action = $path[2];
     	} else {
     		$action = $defaultRoute[2];

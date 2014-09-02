@@ -52,5 +52,27 @@ class My_Autoload {
     	}
     	$classFile.= '.php';
     	return include $classFile;
+    	
+//     	if ($this->fileExist($classFile)) {
+// 	    	return include $classFile;
+//     	} else {
+//     		throw new Exception('file not exits :'.$classFile);
+//     	}
     }
+    
+    public function fileExist($file)
+    {
+    	if (file_exists($file)) {
+	    	return true;
+    	} else {
+    		$paths=explode(PATH_SEPARATOR,get_include_path());
+	    	foreach($paths as $p){
+	    		if(file_exists($p.DS.$file)){
+	    			return true;
+	    		}
+	    	}
+	    	return false;
+    	}
+    }
+    
 }
