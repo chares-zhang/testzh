@@ -1,6 +1,8 @@
 <?php
 /**
  * 用户表基本操作
+ * 是否分表：N
+ * 关系类型：1-1
  * @author chares
  *
  */
@@ -51,7 +53,7 @@ class Core_Model_Base_User extends AbstractModel
 	
 	/**
 	 * 新增用户
-	 * @param unknown_type $data
+	 * @param array $data
 	 * @return boolean
 	 */
 	public function addUserItem($data)
@@ -59,11 +61,14 @@ class Core_Model_Base_User extends AbstractModel
 		$data['createtime'] = time();
 		$data['lastlogin'] = time();
 		$data['updatetime'] = time();
-		$res = $this->db()->insert($this->_name, $data);
+		$res = $this->insertItem($data);
 		return $res ? true : false;
 	}
-	
-	
+
+	public function updateUserItem($data,$where)
+	{
+		$this->updateItem($data, $where);
+	}
 	
 	
 }
