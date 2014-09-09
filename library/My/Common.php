@@ -122,7 +122,11 @@ class Common{
     {
     	return 'sharding_id_0';
     }
-       
+    
+    /**
+     * 引入类
+     * @param unknown_type $modelName
+     */
 	public static function getModel($modelName)
 	{
 		$modelName = trim($modelName);
@@ -137,7 +141,7 @@ class Common{
 	}
 	
 	/**
-	 * 引入类
+	 * 实例化类，并返回其对象
 	 * @param unknown $modelName
 	 */
 	public static function requireModel($modelName)
@@ -154,63 +158,63 @@ class Common{
 		return self::$_staticModel[$modelName];
 	}
 	
-	public static function computeTableId($uid)
-	{
-		$config = self::getConfig('config');
-		$table_div = $config['table_div'];
-		$table_bit = $config['table_bit'];
-		return '_' . str_pad($uid % $table_div, $table_bit, '0', STR_PAD_LEFT);
-	}
+// 	public static function computeTableId($uid)
+// 	{
+// 		$config = self::getConfig('config');
+// 		$table_div = $config['table_div'];
+// 		$table_bit = $config['table_bit'];
+// 		return '_' . str_pad($uid % $table_div, $table_bit, '0', STR_PAD_LEFT);
+// 	}
 
-	public static function shardId($uid)
-	{
-		if(!$uid){
-			echo 'shardId missing param uid';
-		}
-		$router = self::M('Pfrouter')->getRouter($uid);
-		return $router['shardid'];
-	}
+// 	public static function shardId($uid)
+// 	{
+// 		if(!$uid){
+// 			echo 'shardId missing param uid';
+// 		}
+// 		$router = self::M('Pfrouter')->getRouter($uid);
+// 		return $router['shardid'];
+// 	}
 
-	/*
-	* 新建适配的时候用
-	* 根据config.php中配置的weight,获取shardId
-	* @return int 1,2...
-	*/
-	public static function getShardId()
-	{
-		if(!defined('SHARDING') || !SHARDING){
-			return 1;
-		}
-		$config = self::getConfig('config');
-		$servers = $config['db'];
+// 	/*
+// 	* 新建适配的时候用
+// 	* 根据config.php中配置的weight,获取shardId
+// 	* @return int 1,2...
+// 	*/
+// 	public static function getShardId()
+// 	{
+// 		if(!defined('SHARDING') || !SHARDING){
+// 			return 1;
+// 		}
+// 		$config = self::getConfig('config');
+// 		$servers = $config['db'];
 		
-		$weight = array();
-		$total = 0;
-		$count = count($servers);
-		if(count($servers)>1){//数据库主库超过1个
-			foreach($servers as $params){
-				if(!isset($params['weight'])){
-					throw new Exception('pls set mutipl db weight', -1);
-				}
-				$total += $params['weight'];
-				$weight[] = $total;//10,20,70=>$weight=array(10,30,100);
-			}
-			$random = rand(1,$total);//随机一个表
-			for($i=1;$i<=$count;$i++){
-				if($i == 0){
-					if($random <= $weight[$i]){
-						return $i;
-					}
-				}else{
-					if($random>$weight[$i-1] && $random <= $weight[$i]){
-						return $i;
-					}
-				}
-			}
-		}else{//只有一个主库,默认是database->master->params
-			return 1;
-		}
-	}
+// 		$weight = array();
+// 		$total = 0;
+// 		$count = count($servers);
+// 		if(count($servers)>1){//数据库主库超过1个
+// 			foreach($servers as $params){
+// 				if(!isset($params['weight'])){
+// 					throw new Exception('pls set mutipl db weight', -1);
+// 				}
+// 				$total += $params['weight'];
+// 				$weight[] = $total;//10,20,70=>$weight=array(10,30,100);
+// 			}
+// 			$random = rand(1,$total);//随机一个表
+// 			for($i=1;$i<=$count;$i++){
+// 				if($i == 0){
+// 					if($random <= $weight[$i]){
+// 						return $i;
+// 					}
+// 				}else{
+// 					if($random>$weight[$i-1] && $random <= $weight[$i]){
+// 						return $i;
+// 					}
+// 				}
+// 			}
+// 		}else{//只有一个主库,默认是database->master->params
+// 			return 1;
+// 		}
+// 	}
 
 	/**
 	* 获取配置文件中的各种url,默认取webhost
@@ -258,11 +262,11 @@ class Common{
 	public static function getAppKey()
 	{
 		$config = self::getConfig();
-		$isSandbox = $config['is_sandbox'];
+		$isSandbox = $config['plat_info']['is_sandbox'];
 		if ($isSandbox == true) {
-			return $config['sandbox_app_key'];
+			return $config['plat_info']['sandbox_app_key'];
 		} else {
-			return $config['app_key'];
+			return $config['plat_info']['app_key'];
 		}
 	}
 
@@ -290,5 +294,61 @@ class Common{
 		return $config['main_info']['default_route'];
 		
 	}
+	
+	/**
+	 * @TODO 未仔细斟酌
+	 * @param string $url
+	 * @param array  $data
+	 * @return mixed
+	 */
+	static public function post($url, $params)
+	{
+		$str = '';
+		foreach ($params as $k=>$v) {
+			if (is_array($v)) {
+				foreach ($v as $kv => $vv) {
+					$str .= '&' . $k . '[' . $kv  . ']=' . urlencode($vv);
+				}
+			} else {
+				$str .= '&' . $k . '=' . urlencode($v);
+			}
+		}
+		$str = substr($str, 1);
+		if (function_exists('curl_init')) {
+			// Use CURL if installed...
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $str);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_USERAGENT, 'Island API PHP Client 1.0 (curl) ' . phpversion());
+			$result = curl_exec($ch);
+			$errno = curl_errno($ch);
+			curl_close($ch);
+			return array($errno, $result);
+		} else {
+			// Non-CURL based version...
+			$context =
+			array('http' => array(
+				'method' => 'POST',
+				'header' => 'Content-type: application/x-www-form-urlencoded'."\r\n".
+							'User-Agent: Island API PHP Client 1.0 (non-curl) '.phpversion()."\r\n".
+							'Content-length: ' . strlen($str),
+							'content' => $str
+				)
+			);
+			$contextid = stream_context_create($context);
+			$sock = fopen($url, 'r', false, $contextid);
+			if ($sock) {
+				$result = '';
+				while (!feof($sock)) {
+					$result .= fgets($sock, 4096);
+				}
+				fclose($sock);
+			}
+		}
+		return array(0, $result);
+	}
+	
 }
 

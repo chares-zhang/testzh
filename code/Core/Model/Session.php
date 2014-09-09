@@ -1,5 +1,5 @@
 <?php
-class Session extends AbstractModel 
+class Core_Model_Session extends AbstractModel 
 {
 	protected $_name = 'core_sessions';
 
@@ -15,7 +15,7 @@ class Session extends AbstractModel
 	{
 		parent::__construct();
 		$this->uid = $uid;
-		$cookieSid = Cookie::get('sid');
+		$cookieSid = Core_Model_Cookie::get('sid');
 		if (!empty($cookieSid)) {
 			if ($this->_cachable) {
 				$this->data = MC::getInstance()->get($this->_name . '::' . $cookieSid);

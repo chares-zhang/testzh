@@ -17,6 +17,7 @@ return array(
 	),
 	//平台信息
 	'plat_info' => array(
+		'plat_name' => 'taobao',
 		'oauth_url' => 'https://oauth.taobao.com/authorize',
 		'token_url' => 'https://oauth.taobao.com/token',
 		'app_key' => '21573922',
@@ -28,7 +29,13 @@ return array(
 		'sandbox_app_secret' => 'sandbox605318536af01cf6196695c9a',
 		
 		'is_sandbox' => false,
-		'db_group' => 'plat_name_weibo',//每个平台不同数据库分组
+		'db_group' => 'plat_name_taobao',//每个平台不同数据库分组
+	),
+	//cookie信息
+	'cookie' => array(
+		'expire' => time()+3600*24,
+		'path' => '/',
+		'domain' => '.testzh.com'
 	),
 	
 );

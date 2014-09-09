@@ -1,15 +1,15 @@
 <?php
 
-class Cookie 
+class Core_Model_Cookie 
 {
-	public static function is_set($name) 
+	public static function isSetCookie($name) 
 	{
 		return isset($_COOKIE[$name]);
 	}
 
 	public static function get($name)
 	{
-		if (Cookie::is_set($name)) {
+		if (self::isSetCookie($name)) {
 			$value = $_COOKIE[$name];
 			$value = unserialize(base64_decode($value));
 		} else {
@@ -38,7 +38,7 @@ class Cookie
 
 	public static function delete($name) 
 	{
-		Cookie::set($name, '', time()-3600);
+		self::set($name, '', time()-3600);
 		unset($_COOKIE[$name]);
 	}
 

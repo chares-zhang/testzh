@@ -40,57 +40,57 @@ if (!defined('GUARD')) { exit('非法访问'); }
 			'module_instance' => array(
 				//水平分库sharding_id=0(分表依据uid)
 				'sharding_id_0' => array(
-					'core' => 'DB_1',
+					'core' => 'MYDB_1',
 				),
 				//水平分库sharding_id=0(分表依据uid)
 				'sharding_id_1' => array(
 				),
 				//公共,水平分库时可以拆出来,特点:与分表依据(uid)无关的数据放在这里面.
 				'sharding_id_common' => array(
-					'core' => 'DB_1',
+					'core' => 'MYDB_1',
 				),
 				
 			)
 		),
 		/*****腾讯平台 end*****/
 		/*****淘宝平台 begin*****/
-		'plat_name_qq' => array(
+		'plat_name_taobao' => array(
 				'module_dbname' => array(
-						'core' => 'testzh',
+					'core' => 'testzh',
 				),
 				'module_instance' => array(
-						//水平分库sharding_id=0(分表依据uid)
-						'sharding_id_0' => array(
-								'core' => 'DB_1',
-						),
-						//水平分库sharding_id=0(分表依据uid)
-						'sharding_id_1' => array(
-						),
-						//公共,水平分库时可以拆出来,特点:与分表依据(uid)无关的数据放在这里面.
-						'sharding_id_common' => array(
-								'core' => 'DB_1',
-						),
-		
+					//水平分库sharding_id=0(分表依据uid)
+					'sharding_id_0' => array(
+						'core' => 'MYDB_1',
+					),
+					//水平分库sharding_id=0(分表依据uid)
+					'sharding_id_1' => array(
+					),
+					//公共,水平分库时可以拆出来,特点:与分表依据(uid)无关的数据放在这里面.
+					'sharding_id_common' => array(
+						'core' => 'MYDB_1',
+					),
+	
 				)
 		),
 		/*****淘宝平台 end*****/
 		/*****腾讯拍拍 begin*****/
 		'plat_name_paipai' => array(
 				'module_dbname' => array(
-						'core' => 'testzh',
+					'core' => 'testzh',
 				),
 				'module_instance' => array(
-						//水平分库sharding_id=0(分表依据uid)
-						'sharding_id_0' => array(
-								'core' => 'DB_1',
-						),
-						//水平分库sharding_id=0(分表依据uid)
-						'sharding_id_1' => array(
-						),
-						//公共,水平分库时可以拆出来,特点:与分表依据(uid)无关的数据放在这里面.
-						'sharding_id_common' => array(
-								'core' => 'DB_1',
-						),
+					//水平分库sharding_id=0(分表依据uid)
+					'sharding_id_0' => array(
+						'core' => 'MYDB_1',
+					),
+					//水平分库sharding_id=0(分表依据uid)
+					'sharding_id_1' => array(
+					),
+					//公共,水平分库时可以拆出来,特点:与分表依据(uid)无关的数据放在这里面.
+					'sharding_id_common' => array(
+						'core' => 'MYDB_1',
+					),
 		
 				)
 		),

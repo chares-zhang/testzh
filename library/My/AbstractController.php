@@ -9,19 +9,19 @@ abstract class AbstractController {
 	protected $action;
 
 	//配置文件
-	protected $config;
-	//模板变量
-	protected $t = array();
-	//static目录url地址.
-	protected $staticurl = '';
+// 	protected $config;
+// 	//模板变量
+// 	protected $t = array();
+// 	//static目录url地址.
+// 	protected $staticurl = '';
 	
 	public function __construct()
 	{
 		$this->module = Dispatcher::getInstance()->getModule();
 		$this->controller = Dispatcher::getInstance()->getController();
 		$this->action = Dispatcher::getInstance()->getAction();
-		$this->config = Common::getConfig();
-		$this->staticurl = Common::getConfigUrl('static_url');
+// 		$this->config = Common::getConfig();
+// 		$this->staticurl = Common::getConfigUrl('static_url');
 	}
 	
 	/**
@@ -104,11 +104,4 @@ abstract class AbstractController {
 		return $url;
 	}
 	
-	/**
-	* 获取配置文件中的各种url,默认取webhost
-	*
-	*/
-//	public function getConfigUrl($urlKey='webhost'){
-//		return $this->config[$urlKey];
-//	}
 }
