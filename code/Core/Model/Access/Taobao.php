@@ -17,8 +17,9 @@ class Core_Model_Access_Taobao
 		if ($cookieSid && $cookieUid && $this->tokenVerify($cookieUid, $cookieSid)) {
 			return $cookieUid;
 		} else {
-			$this->access();
+			return false;
 		}
+		
 	}
 	
 	//登陆验证
@@ -31,7 +32,7 @@ class Core_Model_Access_Taobao
 		}
 	}
 	
-	//获取oauthUrl
+	//获取oauthUrl,淘宝登陆页面url
 	public static function getOauthUrl()
 	{
 		$config = Common::getConfig();
@@ -50,17 +51,28 @@ class Core_Model_Access_Taobao
 		return $oauthUrl;
 	}
 	
+	//获取tokenUrl，淘宝获取用户信息的url
+	public static function getMainTokenUrl()
+	{
+		$config = Common::getConfig();
+		$isSandbox = $config['plat_info']['is_sandbox'];
+		if ($isSandbox == true) {
+			return $config['plat_info']['sandbox_token_url'];
+		} else {
+			return $config['plat_info']['token_url'];
+		}
+	}
+	
 	/**
-	 * 登陆
+	 * 用户未登陆时的用户登陆逻辑
+	 * 若是授权出错，则提示错误。
+	 * 若是code授权回调请求，则进入code授权回调逻辑去登陆系统
+	 * 若是top_appkey授权回调请求，则进入top_appkey授权回调逻辑去登陆系统
+	 * 若什么都不是，则跳转到淘宝登陆授权页面。
 	 */
 	public function access()
 	{
-// 		$webhostUrl = Common::getWebhostUrl();
 		$oauthUrl = self::getOauthUrl();
-// 		$tokenMainUrl = Common::getMainTokenUrl();
-// 		$appKey = Common::getAppKey();
-// 		$appSecret = Common::getAppSecret();
-
 		if (isset($_REQUEST['error']) && $_REQUEST['error'] == 'access_denied') {//授权失败
 			if (isset($_REQUEST['error_description']) && strpos($_REQUEST['error_description'], 'parent account') !== false) {
 				header("Content-Type:text/html;charset=utf-8");
@@ -68,12 +80,13 @@ class Core_Model_Access_Taobao
 				die();
         	}
 			$this->redirectUrl($oauthUrl);
-		} elseif (isset($_REQUEST['code'])) {//授权成功,获取访问令牌,新增用户or登陆逻辑.
+		} elseif (isset($_REQUEST['code'])) {//code授权,成功,获取访问令牌,新增用户or登陆逻辑.
 			$code = $_REQUEST['code'];
 			$this->_tbAccess($code);
 			//跳转到软件首页.
-			$this->redirect('core/index/index');
-		} elseif (isset($_REQUEST['top_appkey'])) {
+			$defaultRoute = Common::getDefaultRoute();
+			Common::redirect($defaultRoute);
+		} elseif (isset($_REQUEST['top_appkey'])) {//top_appkey授权
 			//暂时没用.
 			$topAppkey = $_REQUEST['top_appkey'];
 			$topSession = $_REQUEST['top_session'];
@@ -81,37 +94,39 @@ class Core_Model_Access_Taobao
 			$topSign = $_REQUEST['top_sign'];
 			var_dump('topParameters',$topParameters);
 			exit;
-		} elseif (isset($_REQUEST['test'])) {
+		} elseif (isset($_REQUEST['test'])) { //超级管理员登陆
 			if (!$this->uid) {//未登录.
 				$uid = 1;
 				$this->_doLogin($uid);
+				
 				//跳转到软件首页.
-				$this->redirect('core/index/index');
+				$defaultRoute = Common::getDefaultRoute();
+				Common::redirect($defaultRoute);
 
-				//跳转到自动橱窗首页.
-				//$this->redirect('tools/showcase/index');
 			} else {//已登录
 
 			}
 		} else {
-			//是否登录
-			if (!$this->uid) {//未登录.
-				$this->redirectUrl($oauthUrl);
-			} else {//已登录
-
-			}
+			Common::redirectUrl($oauthUrl);
 		}
 	}
 	
-	//淘宝授权后的处理逻辑. 创建新用户新用户 或者 更新用户信息. 然后跳转到软件首页.
+	/**
+	 * code授权回调后的处理
+	 * 1.获取用户信息
+	 * 2.新建、更新用户表
+	 * 3.登陆处理cookie和session
+	 * @param unknown_type $code
+	 */
 	private function _tbAccess($code)
 	{
 		//获取登录令牌
 		$result = self::getLoginUserInfo($code);
+		var_dump($result);exit;
 		if (isset($result['error'])) { //获取登录令牌不成功,则跳转到登录登录页面重新授权
 //			throw new Exception($result['error']);
-			$oauthUrl = Common::getOauthUrl();
-			$this->redirectUrl($oauthUrl);
+			$oauthUrl = self::getOauthUrl();
+			Common::redirectUrl($oauthUrl);
 		}
 		$tbUserNick = urldecode($result['taobao_user_nick']);
 		$tbUserId = $result['taobao_user_id'];
@@ -168,16 +183,16 @@ class Core_Model_Access_Taobao
 	//获取登陆信息
 	public static function getLoginUserInfo($code)
 	{
+		$baseUrl = Common::getBaseUrl();
 		$appKey = Common::getAppKey();
 		$appSecret = Common::getAppSecret();
-		$webhostUrl = Common::getWebhostUrl();
-		$tokenMainUrl = Common::getMainTokenUrl();
+		$tokenMainUrl = self::getMainTokenUrl();
 		$params = array(
-				'client_id'	=> $appKey,
-				'client_secret' => $appSecret,
-				'grant_type' => 'authorization_code',
-				'code' => $code,
-				'redirect_uri' => $webhostUrl
+			'client_id'	=> $appKey,
+			'client_secret' => $appSecret,
+			'grant_type' => 'authorization_code',
+			'code' => $code,
+			'redirect_uri' => $baseUrl
 		);
 		$res = Common::post($tokenMainUrl,$params);
 		return json_decode($res[1],true);

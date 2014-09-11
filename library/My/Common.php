@@ -158,104 +158,23 @@ class Common{
 		return self::$_staticModel[$modelName];
 	}
 	
-// 	public static function computeTableId($uid)
-// 	{
-// 		$config = self::getConfig('config');
-// 		$table_div = $config['table_div'];
-// 		$table_bit = $config['table_bit'];
-// 		return '_' . str_pad($uid % $table_div, $table_bit, '0', STR_PAD_LEFT);
-// 	}
-
-// 	public static function shardId($uid)
-// 	{
-// 		if(!$uid){
-// 			echo 'shardId missing param uid';
-// 		}
-// 		$router = self::M('Pfrouter')->getRouter($uid);
-// 		return $router['shardid'];
-// 	}
-
-// 	/*
-// 	* 新建适配的时候用
-// 	* 根据config.php中配置的weight,获取shardId
-// 	* @return int 1,2...
-// 	*/
-// 	public static function getShardId()
-// 	{
-// 		if(!defined('SHARDING') || !SHARDING){
-// 			return 1;
-// 		}
-// 		$config = self::getConfig('config');
-// 		$servers = $config['db'];
-		
-// 		$weight = array();
-// 		$total = 0;
-// 		$count = count($servers);
-// 		if(count($servers)>1){//数据库主库超过1个
-// 			foreach($servers as $params){
-// 				if(!isset($params['weight'])){
-// 					throw new Exception('pls set mutipl db weight', -1);
-// 				}
-// 				$total += $params['weight'];
-// 				$weight[] = $total;//10,20,70=>$weight=array(10,30,100);
-// 			}
-// 			$random = rand(1,$total);//随机一个表
-// 			for($i=1;$i<=$count;$i++){
-// 				if($i == 0){
-// 					if($random <= $weight[$i]){
-// 						return $i;
-// 					}
-// 				}else{
-// 					if($random>$weight[$i-1] && $random <= $weight[$i]){
-// 						return $i;
-// 					}
-// 				}
-// 			}
-// 		}else{//只有一个主库,默认是database->master->params
-// 			return 1;
-// 		}
-// 	}
-
 	/**
 	* 获取配置文件中的各种url,默认取webhost
 	*
 	*/
-	public static function getConfigUrl($urlKey='base_url')
+	public static function getConfigUrl($urlKey)
 	{
 		$config = self::getConfig();
 		return $config['main_info'][$urlKey];
 	}
-
 	
-	//获取oauthUrl
-	public static function getOauthUrl()
+	/**
+	 * 获取配置文件中的各种url,默认取webhost
+	 *
+	 */
+	public static function getBaseUrl($urlKey='base_url')
 	{
-		$config = self::getConfig();
-		$isSandbox = $config['is_sandbox'];
-		if ($isSandbox == true) {
-			$oauthUrl = $config['sandbox_oauth_url'] 
-					.'?client_id='.self::getAppKey()
-					.'&response_type=code&redirect_uri='
-					.self::getWebhostUrl();
-		} else {
-			$oauthUrl = $config['oauth_url'] 
-					.'?client_id='.self::getAppKey()
-					.'&response_type=code&redirect_uri='
-					.self::getWebhostUrl();
-		}
-		return $oauthUrl;
-	}
-	
-	//获取tokenUrl
-	public static function getMainTokenUrl()
-	{
-		$config = self::getConfig();
-		$isSandbox = $config['is_sandbox'];
-		if ($isSandbox == true) {
-			return $config['sandbox_token_url'];
-		} else {
-			return $config['token_url'];
-		}
+		return self::getConfigUrl('base_url');
 	}
 	
 	//获取AppKey
@@ -274,14 +193,67 @@ class Common{
 	public static function getAppSecret()
 	{
 		$config = self::getConfig();
-		$isSandbox = $config['is_sandbox'];
+		$isSandbox = $config['plat_info']['is_sandbox'];
 		if ($isSandbox == true) {
-			return $config['sandbox_app_secret'];
+			return $config['plat_info']['sandbox_app_secret'];
 		} else {
-			return $config['app_secret'];
+			return $config['plat_info']['app_secret'];
 		}
 	}
 	
+	/**
+	 * 模板中指定站内跳转地址. eg.: $this->getUrl("module/controller/action",array('key1'=>'value1'));
+	 * @param string $routePath 例:[模块名]/[控制器名]/[方法名]
+	 * @param array $routeParams 例:array('p'=>2);
+	 */
+	public static function getUrl($routePath,$requestParams=array())
+	{
+		if(empty($routePath)){
+			throw new Exception('getUrl param 1 can not empty.');
+		}
+	
+		$requestUri = '';
+		$tailUrl = $routePath;
+		if (!empty($requestParams)) {
+			if (is_array($requestParams)){//若是数组,拼好requesturi
+				$requestUri = http_build_query($requestParams);
+			}else{//若不是数组，则直接作为参数输出
+				$requestUri = $requestParams;
+			}
+			$tailUrl .= '?'.$requestUri;
+		}
+	
+		$webhostUrl = Common::getBaseUrl();
+		$url = $webhostUrl . $tailUrl;
+	
+		return $url;
+	}
+	
+	/**
+	 * 指定跳转到$url地址.
+	 * @param string $url
+	 */
+	public static function redirectUrl($url)
+	{
+		header("location:$url");
+	}
+	
+	/**
+	 * 指定跳转站内地址
+	 * @param string $routePath 例:[模块名]/[控制器名]/[方法名]
+	 * @param array $routeParams 例:array('p'=>2);
+	 */
+	public static function redirect($path, $arguments=array())
+	{
+		$url = self::getUrl($path,$arguments);
+		header("location:$url");
+	}
+	
+	
+	/**
+	 * 获取默认路径
+	 * @throws Exception
+	 */
 	public static function getDefaultRoute()
 	{
 		$config = self::getConfig();
@@ -349,6 +321,66 @@ class Common{
 		}
 		return array(0, $result);
 	}
+	
+	
+
+	// 	public static function computeTableId($uid)
+	// 	{
+	// 		$config = self::getConfig('config');
+	// 		$table_div = $config['table_div'];
+	// 		$table_bit = $config['table_bit'];
+	// 		return '_' . str_pad($uid % $table_div, $table_bit, '0', STR_PAD_LEFT);
+	// 	}
+	
+	// 	public static function shardId($uid)
+	// 	{
+	// 		if(!$uid){
+	// 			echo 'shardId missing param uid';
+	// 		}
+	// 		$router = self::M('Pfrouter')->getRouter($uid);
+	// 		return $router['shardid'];
+	// 	}
+	
+	// 	/*
+	// 	* 新建适配的时候用
+	// 	* 根据config.php中配置的weight,获取shardId
+	// 	* @return int 1,2...
+	// 	*/
+	// 	public static function getShardId()
+	// 	{
+	// 		if(!defined('SHARDING') || !SHARDING){
+	// 			return 1;
+	// 		}
+	// 		$config = self::getConfig('config');
+	// 		$servers = $config['db'];
+	
+	// 		$weight = array();
+	// 		$total = 0;
+	// 		$count = count($servers);
+	// 		if(count($servers)>1){//数据库主库超过1个
+	// 			foreach($servers as $params){
+	// 				if(!isset($params['weight'])){
+	// 					throw new Exception('pls set mutipl db weight', -1);
+	// 				}
+	// 				$total += $params['weight'];
+	// 				$weight[] = $total;//10,20,70=>$weight=array(10,30,100);
+	// 			}
+	// 			$random = rand(1,$total);//随机一个表
+	// 			for($i=1;$i<=$count;$i++){
+	// 				if($i == 0){
+	// 					if($random <= $weight[$i]){
+	// 						return $i;
+	// 					}
+	// 				}else{
+	// 					if($random>$weight[$i-1] && $random <= $weight[$i]){
+	// 						return $i;
+	// 					}
+	// 				}
+	// 			}
+	// 		}else{//只有一个主库,默认是database->master->params
+	// 			return 1;
+	// 		}
+	// 	}
 	
 }
 

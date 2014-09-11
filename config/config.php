@@ -20,8 +20,8 @@ return array(
 		'plat_name' => 'taobao',
 		'oauth_url' => 'https://oauth.taobao.com/authorize',
 		'token_url' => 'https://oauth.taobao.com/token',
-		'app_key' => '21573922',
-		'app_secret' => '2a99b98605318536af01cf6196695c9a',
+		'app_key' => '21585000',
+		'app_secret' => '458f0167cf7fe485ed1d5bdb006aa8d2',
 		
 		'sandbox_oauth_url' => 'https://oauth.tbsandbox.com/authorize',
 		'sandbox_token_url' => 'https://oauth.tbsandbox.com/token',

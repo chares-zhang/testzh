@@ -53,7 +53,7 @@ abstract class AbstractController {
 	*/
 	public function redirectUrl($url)
 	{
-		header("location:$url");
+		Common::redirectUrl($url);
 	}
 
 	/**
@@ -63,8 +63,7 @@ abstract class AbstractController {
 	*/
 	public function redirect($path, $arguments=array()) 
 	{
-		$url = $this->getUrl($path,$arguments);
-		header("location:$url");
+		Common::redirect($path,$arguments);
 	}
 	
 	/**
@@ -74,34 +73,7 @@ abstract class AbstractController {
 	*/
 	public function getUrl($routePath,$requestParams=array())
 	{
-		if(empty($routePath)){
-			throw new Exception('getUrl param 1 can not empty.');
-		}
-        
-		$routeArray = explode('/', $routePath);
-		
-		if(count($routeArray) != 3){
-			throw new Exception('getUrl param 1 error.');
-		}
-		
-		$module = ('*'===$routeArray[0]) ? $this->module : $routeArray[0];
-		$controller = ('*'===$routeArray[1]) ? $this->controller : $routeArray[1];
-		$action = ('*'===$routeArray[2]) ? $this->action : $routeArray[2];
-		$requestUri = '';
-		$tailUrl = '?m='.$module.'&c='.$controller.'&a='.$action;
-		if (!empty($requestParams)) {
-			if (is_array($requestParams)){//若是数组,拼好requesturi
-				$requestUri = http_build_query($requestParams);
-			}else{//若不是数组，则直接作为参数输出
-				$requestUri = $requestParams;
-			}
-			$tailUrl .= '&'.$requestUri;
-		}
-
-		$webhostUrl = Common::getWebHostUrl();
-		$url = $webhostUrl . $tailUrl;
-		
-		return $url;
+		return Common::getUrl($routePath,$requestParams);
 	}
 	
 }

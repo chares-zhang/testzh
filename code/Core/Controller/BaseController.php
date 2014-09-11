@@ -15,7 +15,7 @@ class Core_BaseController extends AbstractController
 		parent::__construct();
 // 		$this->staticurl = Common::getConfigUrl('static_url');
 // 		$this->webhost = Common::getConfigUrl('base_url');
-		$uid = $this->_getUser();
+		$uid = $this->_getLoginUid();
 		if ($uid) {//已登录
 			$this->uid = $uid;
 		} else {//未登陆，执行登陆流程
@@ -26,11 +26,12 @@ class Core_BaseController extends AbstractController
 
 	}
 	
-	private function _getUser()
+	private function _getLoginUid()
 	{
 		$config = Common::getConfig();
 		$platName = $config['plat_info']['plat_name'];
 		$uid = Core_Model_Access_Factory::factory($platName)->getLoginUid();
+		return $uid;
 	}
 	
 	private function _access()
