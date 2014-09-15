@@ -44,11 +44,19 @@ class Core_Model_Base_User extends AbstractModel
 	protected $_cachable = false;
 	
 	/**
-	 * 获取单个用户
+	 * 通过主键获取单个用户
 	 */
 	public function getUserItem($uid)
 	{
 		return $this->load($uid);
+	}
+	
+	/**
+	 * 通过用户名获取单个用户
+	 */
+	public function getUserItemByName($username)
+	{
+		return $this->load('username',$username);
 	}
 	
 	/**
@@ -58,9 +66,9 @@ class Core_Model_Base_User extends AbstractModel
 	 */
 	public function addUserItem($data)
 	{
-		$data['createtime'] = time();
-		$data['lastlogin'] = time();
-		$data['updatetime'] = time();
+		$data['my_created'] = time();
+// 		$data['last_login'] = time();
+		$data['my_modified'] = time();
 		$res = $this->insertItem($data);
 		return $res ? true : false;
 	}

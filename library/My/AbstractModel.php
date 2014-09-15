@@ -339,6 +339,8 @@ abstract class AbstractModel {
 		$where .= " limit 1";
 		$mainTable = $this->getMainTable($divKey);
 		$sql = "select * from {$mainTable} where {$where}";
+		var_dump($bind);
+		echo $sql;exit;
 		$sqlParams = self::createSql($sql,$bind);
 	
 		try{

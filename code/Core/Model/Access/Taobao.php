@@ -122,7 +122,6 @@ class Core_Model_Access_Taobao
 	{
 		//获取登录令牌
 		$result = self::getLoginUserInfo($code);
-		var_dump($result);exit;
 		if (isset($result['error'])) { //获取登录令牌不成功,则跳转到登录登录页面重新授权
 //			throw new Exception($result['error']);
 			$oauthUrl = self::getOauthUrl();
@@ -140,10 +139,9 @@ class Core_Model_Access_Taobao
 		$r2Expired = date('Y-m-d H:i:s',strtotime("+ $r2ExpiresIn seconds"));
 		$refreshToken = $result['refresh_token'];
 		$accessToken   = $result['access_token'];
-
+		
 		$coreUserM = Common::getModel('core/user');
-		$where = "nick='{$tbUserNick}'";
-		$userRow = $coreUserM->getRow($where,'*');
+		$userRow = $coreUserM->getUserItemByName($tbUserNick);
 		if (empty($userRow)) {//新增用户
 			$userRow = array(
 				'nick' => $tbUserNick,
@@ -194,8 +192,9 @@ class Core_Model_Access_Taobao
 			'code' => $code,
 			'redirect_uri' => $baseUrl
 		);
+// 		var_dump($tokenMainUrl,$params);exit;
 		$res = Common::post($tokenMainUrl,$params);
-		return json_decode($res[1],true);
+		return json_decode($res,true);
 	}
 	
 	private function _doLogin($uid)

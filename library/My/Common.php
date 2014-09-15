@@ -294,6 +294,8 @@ class Common{
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $str);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch, CURLOPT_USERAGENT, 'Island API PHP Client 1.0 (curl) ' . phpversion());
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 			$result = curl_exec($ch);
 			$errno = curl_errno($ch);
 			curl_close($ch);
@@ -319,7 +321,48 @@ class Common{
 				fclose($sock);
 			}
 		}
+		
 		return array(0, $result);
+
+// 		$ch = curl_init();
+// 		curl_setopt($ch, CURLOPT_URL, $url);
+// 		curl_setopt($ch, CURLOPT_FAILONERROR, false);
+// 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+// 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+// 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+// 		if (is_array($params) && 0 < count($params))
+// 		{
+// 			$postBodyString = "";
+// 			$postMultipart = false;
+// 			foreach ($params as $k => $v)
+// 			{
+// 				if ("@" != substr($v, 0, 1)) {//判断是不是文件上传 
+// 					$postBodyString .= "$k=" . urlencode($v) . "&";
+// 				} else {//文件上传用multipart/form-data，否则用www-form-urlencoded
+// 					$postMultipart = true;
+// 				}
+// 			}
+// 			unset($k, $v);
+// 			curl_setopt($ch, CURLOPT_POST, true);
+// 			if ($postMultipart) {
+// 				curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+// 			} else {
+// 				curl_setopt($ch, CURLOPT_POSTFIELDS, substr($postBodyString,0,-1));
+// 			}
+// 		}
+// 		$reponse = curl_exec($ch);
+// 		if (curl_errno($ch)) {
+// 			throw new Exception(curl_error($ch),0);
+// 		} else{
+// 			$httpStatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+// 			if (200 !== $httpStatusCode)
+// 			{
+// 				throw new Exception($reponse,$httpStatusCode);
+// 			}
+// 		}
+// 		curl_close($ch);
+		
+// 		return $reponse;
 	}
 	
 	
