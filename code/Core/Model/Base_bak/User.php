@@ -56,7 +56,7 @@ class Core_Model_Base_User extends AbstractModel
 	 */
 	public function getUserItemByName($username)
 	{
-		return $this->load('username',$username);
+		return $this->load($username,'username');
 	}
 	
 	/**
@@ -66,15 +66,16 @@ class Core_Model_Base_User extends AbstractModel
 	 */
 	public function addUserItem($data)
 	{
-		$data['my_created'] = time();
-// 		$data['last_login'] = time();
-		$data['my_modified'] = time();
+		$data['my_created'] = date('Y-m-d H:i:s');
+		$data['my_updated'] = date('Y-m-d H:i:s');
+		$data['my_updated'] = date('Y-m-d H:i:s');
 		$res = $this->insertItem($data);
 		return $res ? true : false;
 	}
 
 	public function updateUserItem($data,$where)
 	{
+		$data['my_updated'] = date('Y-m-d H:i:s');
 		$this->updateItem($data, $where);
 	}
 	

@@ -141,6 +141,28 @@ class Common{
 	}
 	
 	/**
+	 * 引入分平台类
+	 */
+	public static function getPlatModel($modelName)
+	{
+		$modelName = trim($modelName);
+		if (strpos($modelName, '/')===false) {
+			$modelName = ucfirst($modelName);
+		}else{
+			$modelArr = explode('/', trim($modelName));
+			$modelArr[0] = $modelArr[0] . '_Model';
+			$modelName = str_replace(' ', '_',ucwords((implode(' ',$modelArr))));
+		}
+		$platName = self::getPlatName();
+		if(!empty($platName)) {
+			$modelArr = explode("_", $modelName);
+			array_splice($modelArr, 2, 0 , $platName);
+			$modelName = join("_", $modelArr);
+		}
+		return self::requireModel($modelName);
+	}
+	
+	/**
 	 * 实例化类，并返回其对象
 	 * @param unknown $modelName
 	 */
@@ -156,49 +178,6 @@ class Common{
 			exit;
 		}
 		return self::$_staticModel[$modelName];
-	}
-	
-	/**
-	* 获取配置文件中的各种url,默认取webhost
-	*
-	*/
-	public static function getConfigUrl($urlKey)
-	{
-		$config = self::getConfig();
-		return $config['main_info'][$urlKey];
-	}
-	
-	/**
-	 * 获取配置文件中的各种url,默认取webhost
-	 *
-	 */
-	public static function getBaseUrl($urlKey='base_url')
-	{
-		return self::getConfigUrl('base_url');
-	}
-	
-	//获取AppKey
-	public static function getAppKey()
-	{
-		$config = self::getConfig();
-		$isSandbox = $config['plat_info']['is_sandbox'];
-		if ($isSandbox == true) {
-			return $config['plat_info']['sandbox_app_key'];
-		} else {
-			return $config['plat_info']['app_key'];
-		}
-	}
-
-	//获取AppSecret
-	public static function getAppSecret()
-	{
-		$config = self::getConfig();
-		$isSandbox = $config['plat_info']['is_sandbox'];
-		if ($isSandbox == true) {
-			return $config['plat_info']['sandbox_app_secret'];
-		} else {
-			return $config['plat_info']['app_secret'];
-		}
 	}
 	
 	/**
@@ -224,7 +203,7 @@ class Common{
 		}
 	
 		$webhostUrl = Common::getBaseUrl();
-		$url = $webhostUrl . $tailUrl;
+		$url = $webhostUrl . '/' . $tailUrl;
 	
 		return $url;
 	}
@@ -249,6 +228,54 @@ class Common{
 		header("location:$url");
 	}
 	
+	/**
+	* 获取配置文件中的各种url,默认取webhost
+	*
+	*/
+	public static function getConfigUrl($urlKey)
+	{
+		$config = self::getConfig();
+		return $config['main_info'][$urlKey];
+	}
+	
+	/**
+	 * 获取配置文件中的各种url,默认取webhost
+	 *
+	 */
+	public static function getBaseUrl($urlKey='base_url')
+	{
+		return self::getConfigUrl('base_url');
+	}
+	
+	public static function getPlatName()
+	{
+		$config = self::getConfig();
+		return $config['plat_info']['plat_name'];
+	}
+	
+	//获取AppKey
+	public static function getAppKey()
+	{
+		$config = self::getConfig();
+		$isSandbox = $config['plat_info']['is_sandbox'];
+		if ($isSandbox == true) {
+			return $config['plat_info']['sandbox_app_key'];
+		} else {
+			return $config['plat_info']['app_key'];
+		}
+	}
+
+	//获取AppSecret
+	public static function getAppSecret()
+	{
+		$config = self::getConfig();
+		$isSandbox = $config['plat_info']['is_sandbox'];
+		if ($isSandbox == true) {
+			return $config['plat_info']['sandbox_app_secret'];
+		} else {
+			return $config['plat_info']['app_secret'];
+		}
+	}
 	
 	/**
 	 * 获取默认路径
@@ -301,68 +328,8 @@ class Common{
 			curl_close($ch);
 			return array($errno, $result);
 		} else {
-			// Non-CURL based version...
-			$context =
-			array('http' => array(
-				'method' => 'POST',
-				'header' => 'Content-type: application/x-www-form-urlencoded'."\r\n".
-							'User-Agent: Island API PHP Client 1.0 (non-curl) '.phpversion()."\r\n".
-							'Content-length: ' . strlen($str),
-							'content' => $str
-				)
-			);
-			$contextid = stream_context_create($context);
-			$sock = fopen($url, 'r', false, $contextid);
-			if ($sock) {
-				$result = '';
-				while (!feof($sock)) {
-					$result .= fgets($sock, 4096);
-				}
-				fclose($sock);
-			}
+			throw new Exception ("curl_init function not exist");
 		}
-		
-		return array(0, $result);
-
-// 		$ch = curl_init();
-// 		curl_setopt($ch, CURLOPT_URL, $url);
-// 		curl_setopt($ch, CURLOPT_FAILONERROR, false);
-// 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-// 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-// 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-// 		if (is_array($params) && 0 < count($params))
-// 		{
-// 			$postBodyString = "";
-// 			$postMultipart = false;
-// 			foreach ($params as $k => $v)
-// 			{
-// 				if ("@" != substr($v, 0, 1)) {//判断是不是文件上传 
-// 					$postBodyString .= "$k=" . urlencode($v) . "&";
-// 				} else {//文件上传用multipart/form-data，否则用www-form-urlencoded
-// 					$postMultipart = true;
-// 				}
-// 			}
-// 			unset($k, $v);
-// 			curl_setopt($ch, CURLOPT_POST, true);
-// 			if ($postMultipart) {
-// 				curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-// 			} else {
-// 				curl_setopt($ch, CURLOPT_POSTFIELDS, substr($postBodyString,0,-1));
-// 			}
-// 		}
-// 		$reponse = curl_exec($ch);
-// 		if (curl_errno($ch)) {
-// 			throw new Exception(curl_error($ch),0);
-// 		} else{
-// 			$httpStatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-// 			if (200 !== $httpStatusCode)
-// 			{
-// 				throw new Exception($reponse,$httpStatusCode);
-// 			}
-// 		}
-// 		curl_close($ch);
-		
-// 		return $reponse;
 	}
 	
 	

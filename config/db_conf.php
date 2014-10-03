@@ -19,6 +19,7 @@ if (!defined('GUARD')) { exit('非法访问'); }
 				//水平分库sharding_id=0(分表依据uid)
 				'sharding_id_0' => array(
 					'core' => 'MYDB_1',
+					'access' => 'MYDB_1',
 				),
 				//水平分库sharding_id=0(分表依据uid)
 				'sharding_id_1' => array(
@@ -36,11 +37,13 @@ if (!defined('GUARD')) { exit('非法访问'); }
 		'plat_name_qq' => array(
 			'module_dbname' => array(
 				'core' => 'testzh',
+				'access' => 'testzh',
 			),
 			'module_instance' => array(
 				//水平分库sharding_id=0(分表依据uid)
 				'sharding_id_0' => array(
 					'core' => 'MYDB_1',
+					'access' => 'MYDB_1',
 				),
 				//水平分库sharding_id=0(分表依据uid)
 				'sharding_id_1' => array(
@@ -57,11 +60,13 @@ if (!defined('GUARD')) { exit('非法访问'); }
 		'plat_name_taobao' => array(
 				'module_dbname' => array(
 					'core' => 'testzh',
+					'access' => 'testzh',
 				),
 				'module_instance' => array(
 					//水平分库sharding_id=0(分表依据uid)
 					'sharding_id_0' => array(
 						'core' => 'MYDB_1',
+						'access' => 'MYDB_1',
 					),
 					//水平分库sharding_id=0(分表依据uid)
 					'sharding_id_1' => array(
@@ -78,11 +83,13 @@ if (!defined('GUARD')) { exit('非法访问'); }
 		'plat_name_paipai' => array(
 				'module_dbname' => array(
 					'core' => 'testzh',
+					'access' => 'testzh',
 				),
 				'module_instance' => array(
 					//水平分库sharding_id=0(分表依据uid)
 					'sharding_id_0' => array(
 						'core' => 'MYDB_1',
+						'access' => 'MYDB_1',
 					),
 					//水平分库sharding_id=0(分表依据uid)
 					'sharding_id_1' => array(

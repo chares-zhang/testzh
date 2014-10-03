@@ -9,10 +9,11 @@ return array(
 		'static_url' => 'http://testzh.testzh.com/public/static',
 		'default_route' => 'core/index/index',
 		//支持分布式memcached
-		'memcache'=>array(
+		'memcache' => array(
 			'mem_1' => array('host' => '127.0.0.1', 'port' => 11211, 'weight' => 100),
 // 			'mem_2' => array('host' => '127.0.0.1', 'port' => 11211, 'weight' => 100),
 		),
+		'session_save' => 'memcache',
 		'login_type' => 'single', //single单点登陆; multi
 	),
 	//平台信息

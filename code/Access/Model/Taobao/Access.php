@@ -4,7 +4,7 @@
  * @author chares
  *
  */
-class Core_Model_Access_Taobao
+class Access_Model_Taobao_Access
 {
 	const PLAT_TAOBAO = 'taobao'; //淘宝平台
 	
@@ -25,11 +25,12 @@ class Core_Model_Access_Taobao
 	//登陆验证
 	public function tokenVerify($uid,$sid)
 	{
-		if (Core_Model_Session::getInstance($uid)->valid($sid)) {
-			return true;
-		} else {
-			return false;
-		}
+		$session = Common::getModel('core/');
+// 		if (Core_Model_Session::getInstance($uid)->valid($sid)) {
+// 			return true;
+// 		} else {
+// 			return false;
+// 		}
 	}
 	
 	//获取oauthUrl,淘宝登陆页面url
@@ -88,12 +89,12 @@ class Core_Model_Access_Taobao
 			Common::redirect($defaultRoute);
 		} elseif (isset($_REQUEST['top_appkey'])) {//top_appkey授权
 			//暂时没用.
-			$topAppkey = $_REQUEST['top_appkey'];
-			$topSession = $_REQUEST['top_session'];
-			$topParameters = $_REQUEST['top_parameters'];
-			$topSign = $_REQUEST['top_sign'];
-			var_dump('topParameters',$topParameters);
-			exit;
+// 			$topAppkey = $_REQUEST['top_appkey'];
+// 			$topSession = $_REQUEST['top_session'];
+// 			$topParameters = $_REQUEST['top_parameters'];
+// 			$topSign = $_REQUEST['top_sign'];
+// 			var_dump('topParameters',$topParameters);
+// 			exit;
 		} elseif (isset($_REQUEST['test'])) { //超级管理员登陆
 			if (!$this->uid) {//未登录.
 				$uid = 1;
@@ -107,6 +108,7 @@ class Core_Model_Access_Taobao
 
 			}
 		} else {
+			//跳转到软件首页.
 			Common::redirectUrl($oauthUrl);
 		}
 	}
@@ -140,11 +142,11 @@ class Core_Model_Access_Taobao
 		$refreshToken = $result['refresh_token'];
 		$accessToken   = $result['access_token'];
 		
-		$coreUserM = Common::getModel('core/user');
-		$userRow = $coreUserM->getUserItemByName($tbUserNick);
+		$accessUserM = Common::getPlatModel('access/user');
+		$userRow = $accessUserM->getUserItemByName($tbUserNick);
 		if (empty($userRow)) {//新增用户
 			$userRow = array(
-				'nick' => $tbUserNick,
+				'username' => $tbUserNick,
 				'tb_user_id' => $tbUserId,
 				'w2_expired' => $w2Expired,
 				'r2_expired' => $r2Expired,
@@ -153,13 +155,13 @@ class Core_Model_Access_Taobao
 				're_expired' => $reExpired,
 				'refresh_token' => $refreshToken,
 				'is_access_token_expired' => 0,
-//				'version_no' => '1',
-				'lastlogin' => time(),
+				'version_no' => '1',
+				'last_login' => date('Y-m-d H:i:s'),
 			);
-			$uid = $coreUserM->addUserItem($userRow);
+			$uid = $accessUserM->addUserItem($userRow);
 		} else {//老用户更新.
 			if (!empty($tbUserNick)) {
-				$userRow['nick'] = $tbUserNick;
+				$userRow['username'] = $tbUserNick;
 			}
 			if (!empty($tbUserId)) {
 				$userRow['tb_user_id'] = $tbUserId;
@@ -172,7 +174,7 @@ class Core_Model_Access_Taobao
 			$userRow['refresh_token'] = $refreshToken;
 			$uid = $userRow['uid'];
 			$where = "uid = '{$uid}'";
-			$res = $coreUserM->updateUserItem($userRow,$where);
+			$res = $accessUserM->updateUserItem($userRow,$where);
 		}
 		//完成登录.
 		$this->_doLogin($uid);
@@ -192,15 +194,14 @@ class Core_Model_Access_Taobao
 			'code' => $code,
 			'redirect_uri' => $baseUrl
 		);
-// 		var_dump($tokenMainUrl,$params);exit;
 		$res = Common::post($tokenMainUrl,$params);
-		return json_decode($res,true);
+		return json_decode($res[1],true);
 	}
 	
 	private function _doLogin($uid)
 	{
-		Core_Model_Session::getInstance($uid)->start();
-		$sid = Core_Model_Session::getInstance($uid)->session_id();
+		Access_Model_Taobao_Session::getInstance($uid)->start();
+		$sid = Access_Model_Taobao_Session::getInstance($uid)->session_id();
 		Core_Model_Cookie::set('sid', $sid, time() + 3600, '/');
 		Core_Model_Cookie::set('uid', $uid, time() + 3600, '/');
 	}

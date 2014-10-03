@@ -1,0 +1,23 @@
+CREATE TABLE `core_user` (
+	`uid` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+	`username` varchar(255) NOT NULL COMMENT '淘宝昵称',
+	`tb_user_id`  bigint(20) NOT NULL DEFAULT '0' COMMENT '淘宝用户id',
+	`w2_expired` datetime NOT NULL DEFAULT '2012-08-29 23:59:59',
+	`r2_expired` datetime NOT NULL DEFAULT '2012-08-29 23:59:59',
+	`access_token` varchar(255) NOT NULL COMMENT '淘宝访问令牌',
+	`sub_access_token` varchar(255) NOT NULL COMMENT '淘宝子账号访问令牌,预留',
+	`re_expired` datetime NOT NULL COMMENT 'Refresh token 过期时间',
+	`refresh_token` varchar(100) NOT NULL COMMENT 'Refresh token',
+	`is_access_token_expired` enum('0','1') NOT NULL DEFAULT '0' COMMENT '访问令牌是否已经过期',
+	`version_no` enum('1','2','3','4') NOT NULL DEFAULT '1' COMMENT '1：免费版 2：标准 3：高级版 4 可能没用吧',
+	`last_login` datetime DEFAULT NUll COMMENT '最后一次登录时间',
+	`my_created` datetime DEFAULT NULL COMMENT '创建时间',
+	`my_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+	PRIMARY KEY (`uid`),
+	KEY `core_user_username` (`username`),
+	KEY `core_user_my_created` (`my_created`),
+	KEY `core_user_tb_user_id` (`tb_user_id`),
+	KEY `core_user_re_expired` (`re_expired`),
+	KEY `core_user_r2_expired` (`r2_expired`),
+	KEY `core_user_last_login` (`last_login`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

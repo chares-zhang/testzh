@@ -28,9 +28,8 @@ class Core_BaseController extends AbstractController
 	
 	private function _getLoginUid()
 	{
-		$config = Common::getConfig();
-		$platName = $config['plat_info']['plat_name'];
-		$uid = Core_Model_Access_Factory::factory($platName)->getLoginUid();
+		$platName = Common::getPlatName();
+		$uid = Access_Model_Factory::factory($platName)->getLoginUid();
 		return $uid;
 	}
 	
@@ -38,7 +37,7 @@ class Core_BaseController extends AbstractController
 	{
 		$config = Common::getConfig();
 		$platName = $config['plat_info']['plat_name'];
-		$uid = Core_Model_Access_Factory::factory($platName)->access();
+		$uid = Access_Model_Factory::factory($platName)->access();
 	}
 	
 // 	private function _getUser() 
