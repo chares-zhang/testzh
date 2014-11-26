@@ -1,0 +1,86 @@
+<div id="content">
+	<div class="box-title">
+		<h1>橱窗状态</h1>
+	</div>
+	<div class="breadcrumbs">
+		<span>橱窗推荐总数:<b>15</b></span>
+		<span>已使用橱窗数:<b>5</b></span>
+		<span>出售中的宝贝数量:<b>150</b></span>
+		<span>仓库中的宝贝数量:<b>10</b></span>
+	</div>
+	<div class="line-height-20"></div>
+	<div class="box-title">
+		<h1>自动橱窗设置</h1>
+	</div>
+	<!-- main-form -->
+	<div class="main-form">
+		<div class="form-line">
+			<label class="label-name">开启状态：</label>
+			<div class="controls-line">
+				<input class="input-radio" type="radio" value="0" id="switch-close" name="switch" checked="checked" /><label class="label-for" for="switch-close">关闭</label>
+				<input class="input-radio" type="radio" value="" id="switch-open" name="switch" /><label class="label-for" for="switch-open">开启</label>
+				<div class="append">开启/关闭自动橱窗功能</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="form-line">
+			<label class="label-name">推荐方式：</label>
+			<div class="controls-line">
+				<input type="radio" class="input-radio"value="1" id="style-1" name="style" checked="checked" /><label class="label-for" for="style-1">推荐所有出售中的宝贝</label>
+			</div>
+			<label class="label-name"></label>
+			<div class="controls-line">
+				<input type="radio" class="input-radio" value="2" id="style-2" name="style" /><label class="label-for" for="style-2">推荐含有关键字的宝贝</label>
+			</div>
+			<div class="controls-line" style="margin-left:170px;">
+				<input class="input-text w-240" type="text" class="text" value="" name="keyword" />
+				<span class="append">多个词请用','隔开</span>
+			</div>
+			<label class="label-name"></label>
+			<div class="controls-line">
+				<input type="radio" class="input-radio" value="3" id="style-3" name="style" /><label class="label-for" for="style-3">指定店铺类目中的宝贝</label>
+			</div>
+			<div class="controls-line">
+				<ul id="checkboxTree" class="grade-1">  
+					<li><input id="cat-1" type="checkbox" name="cat[]" value='1' /><label for="cat-1">北京</label></li>
+					<li><input id="cat-2" type="checkbox" name="cat[]" value='2' /><label for="cat-2">福建</label>
+						<ul class="grade-1">
+							<li><input id="cat-3" type="checkbox" name="cat[]" value='3' /><label for="cat-3">厦门</label>
+								<ul class="grade-1">
+									<li><input id="cat-4" type="checkbox" name="cat[]" value='4' /><label for="cat-4">同安</label></li>
+									<li><input id="cat-5" type="checkbox" name="cat[]" value='5' /><label for="cat-5">集美</label></li>
+									<li><input id="cat-6" type="checkbox" name="cat[]" value='6' /><label for="cat-6">思明</label></li>
+									<li><input id="cat-7" type="checkbox" name="cat[]" value='7' /><label for="cat-7">湖里</label></li>
+									<li><input id="cat-8" type="checkbox" name="cat[]" value='8' /><label for="cat-8">翔安</label></li>
+								</ul>
+							</li>
+							<li><input id="cat-9" type="checkbox" name="cat[]" value='9' /><label for="cat-9">泉州</label></li>
+							<li><input id="cat-10" type="checkbox" name="cat[]" value='9' /><label for="cat-10">漳州</label></li>
+						</ul>
+					</li>
+					<li><input id="cat-11" type="checkbox" name="cat[]" value='1' /><label for="cat-11">广东</label>
+						<ul class="grade-1">
+							<li><input id="cat-12" type="checkbox" name="cat[]" value='3' /><label for="cat-12">深圳</label></li>
+							<li><input id="cat-13" type="checkbox" name="cat[]" value='9' /><label for="cat-13">中山</label></li>
+							<li><input id="cat-14" type="checkbox" name="cat[]" value='9' /><label for="cat-14">广州</label></li>
+						</ul>
+					</li>
+					<li><input id="cat-15" type="checkbox" name="cat[]" value='1' /><label for="cat-15">浙江</label>
+						<ul class="grade-1">
+							<li><input id="cat-16" type="checkbox" name="cat[]" value='3' /><label for="cat-16">嘉兴</label></li>
+							<li><input id="cat-17" type="checkbox" name="cat[]" value='9' /><label for="cat-17">杭州</label></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="form-line operation">
+			<a href="javascript:viod();" class="blueBtn" onclick="save();">保存设置</a>
+			<div class="clear"></div>
+		</div>
+
+		<div class="clear"></div>
+	</div>
+	<!-- end of main-form -->
+</div>
