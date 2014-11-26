@@ -4,7 +4,7 @@
  */
 
 class Dispatcher {
-    protected static $_instance;
+    private static $_instance;
 	/**
 	 * 请求模块
 	 */

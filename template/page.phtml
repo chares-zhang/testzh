@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>test</title>
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<!--<link type="text/css" rel="stylesheet" href="<?php echo $this->getStaticUrl();?>/css/main.css" media="all">-->
+	<link type="text/css" rel="stylesheet" href="<?php echo $this->getStaticUrl();?>/css/main-test.css" media="all">
+
+	<script type="text/javascript" src="<?php echo $this->getStaticUrl();?>/js/head.load.min.js"></script>
+    <script type="text/javascript">
+    	head.js({libs: "<?php echo $this->getStaticUrl();?>/js/dzg_lib.min.js?ver=11"},
+	    		"<?php echo $this->getStaticUrl();?>/js/script.js?ver=1371402062.12312");
+    </script>
+</head>
+
+<body>
+<!-- #header -->
+<div id="header">
+	<div id="logo">
+		<a href="#"><img alt="大掌柜_自动橱窗" src="<?php echo $this->getStaticUrl();?>/i/logo.png" /></a>
+	</div>
+</div>
+<!-- end of #header -->
+
+<div id="wrap">
+	<!-- #container -->
+<div id="container">
+	<?php echo $this->getBlockHtml('core/page_menu')?>
+	<!-- content -->
+	<?php echo $this->getBlockHtml('content');?>
+	<!-- end of content -->
+	
+	</div>
+<!-- end of #container -->
+	
+</div><!-- #wrap -->
+
+<!-- #footer -->
+<div id="footer">
+	<div class="copyright">© 2013 xxxx 版权所有</div>
+</div>
+<!-- end of #footer -->
+</body>
+</html>

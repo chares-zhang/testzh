@@ -11,26 +11,22 @@ class Access_Model_Taobao_Access
 	//获取当前登陆的uid
 	public function getLoginUid()
 	{
-		$cookieSid = Core_Model_Cookie::get('sid');
 		$cookieUid = Core_Model_Cookie::get('uid');
+		
 		//存在cookie则证明已经登录了.
-		if ($cookieSid && $cookieUid && $this->tokenVerify($cookieUid, $cookieSid)) {
+		if ($cookieUid && $this->valid($cookieUid)) {
 			return $cookieUid;
 		} else {
-			return false;
+			//删除现有的cookie和session
+			$uid = $this->access();
+			return $uid;
 		}
 		
 	}
 	
-	//登陆验证
-	public function tokenVerify($uid,$sid)
+	public function valid($cookieUid)
 	{
-		$session = Common::getModel('core/');
-// 		if (Core_Model_Session::getInstance($uid)->valid($sid)) {
-// 			return true;
-// 		} else {
-// 			return false;
-// 		}
+		return Access_Model_Taobao_Session::getInstance()->valid($cookieUid);
 	}
 	
 	//获取oauthUrl,淘宝登陆页面url
@@ -66,24 +62,19 @@ class Access_Model_Taobao_Access
 	
 	/**
 	 * 用户未登陆时的用户登陆逻辑
-	 * 若是授权出错，则提示错误。
 	 * 若是code授权回调请求，则进入code授权回调逻辑去登陆系统
 	 * 若是top_appkey授权回调请求，则进入top_appkey授权回调逻辑去登陆系统
-	 * 若什么都不是，则跳转到淘宝登陆授权页面。
+	 * 若没有授权标志，则
+	 * 	若是授权出错，则提示错误。
+	 * 	其他情况，跳转到淘宝登陆授权页面。
 	 */
 	public function access()
 	{
 		$oauthUrl = self::getOauthUrl();
-		if (isset($_REQUEST['error']) && $_REQUEST['error'] == 'access_denied') {//授权失败
-			if (isset($_REQUEST['error_description']) && strpos($_REQUEST['error_description'], 'parent account') !== false) {
-				header("Content-Type:text/html;charset=utf-8");
-				echo "主号未授权该子帐号使用该应用，请联系主号授权后再来使用.<a href='http://fuwu.taobao.com/ser/detail.htm?service_id=239'>返回应用页面</a>";
-				die();
-        	}
-			$this->redirectUrl($oauthUrl);
-		} elseif (isset($_REQUEST['code'])) {//code授权,成功,获取访问令牌,新增用户or登陆逻辑.
+		if (isset($_REQUEST['code'])) {//code授权,成功,获取访问令牌,新增用户or登陆逻辑.
 			$code = $_REQUEST['code'];
-			$this->_tbAccess($code);
+			$this->_tbCodeAccess($code);
+
 			//跳转到软件首页.
 			$defaultRoute = Common::getDefaultRoute();
 			Common::redirect($defaultRoute);
@@ -96,21 +87,23 @@ class Access_Model_Taobao_Access
 // 			var_dump('topParameters',$topParameters);
 // 			exit;
 		} elseif (isset($_REQUEST['test'])) { //超级管理员登陆
-			if (!$this->uid) {//未登录.
-				$uid = 1;
-				$this->_doLogin($uid);
-				
-				//跳转到软件首页.
-				$defaultRoute = Common::getDefaultRoute();
-				Common::redirect($defaultRoute);
-
-			} else {//已登录
-
-			}
+			$uid = 1;
+			$this->_doLogin($uid);
+			
 		} else {
-			//跳转到软件首页.
-			Common::redirectUrl($oauthUrl);
+			if (isset($_REQUEST['error']) && $_REQUEST['error'] == 'access_denied') {//授权失败
+				if (isset($_REQUEST['error_description']) && strpos($_REQUEST['error_description'], 'parent account') !== false) {
+					header("Content-Type:text/html;charset=utf-8");
+					echo "主号未授权该子帐号使用该应用，请联系主号授权后再来使用.<a href='http://fuwu.taobao.com/ser/detail.htm?service_id=239'>返回应用页面</a>";
+					die();
+				}
+				Common::redirectUrl($oauthUrl);
+			} else {
+				//跳转到软件首页.
+				Common::redirectUrl($oauthUrl);
+			}
 		}
+		
 	}
 	
 	/**
@@ -120,15 +113,15 @@ class Access_Model_Taobao_Access
 	 * 3.登陆处理cookie和session
 	 * @param unknown_type $code
 	 */
-	private function _tbAccess($code)
+	private function _tbCodeAccess($code)
 	{
 		//获取登录令牌
 		$result = self::getLoginUserInfo($code);
 		if (isset($result['error'])) { //获取登录令牌不成功,则跳转到登录登录页面重新授权
-//			throw new Exception($result['error']);
 			$oauthUrl = self::getOauthUrl();
 			Common::redirectUrl($oauthUrl);
 		}
+		
 		$tbUserNick = urldecode($result['taobao_user_nick']);
 		$tbUserId = $result['taobao_user_id'];
 		$subTbUserNick = isset($result['sub_taobao_user_nick'])?urldecode($result['sub_taobao_user_nick']):'';
@@ -146,17 +139,17 @@ class Access_Model_Taobao_Access
 		$userRow = $accessUserM->getUserItemByName($tbUserNick);
 		if (empty($userRow)) {//新增用户
 			$userRow = array(
-				'username' => $tbUserNick,
-				'tb_user_id' => $tbUserId,
-				'w2_expired' => $w2Expired,
-				'r2_expired' => $r2Expired,
-				'access_token' => $accessToken,
-				'sub_access_token' => $accessToken,
-				're_expired' => $reExpired,
-				'refresh_token' => $refreshToken,
-				'is_access_token_expired' => 0,
-				'version_no' => '1',
-				'last_login' => date('Y-m-d H:i:s'),
+					'username' => $tbUserNick,
+					'tb_user_id' => $tbUserId,
+					'w2_expired' => $w2Expired,
+					'r2_expired' => $r2Expired,
+					'access_token' => $accessToken,
+					'sub_access_token' => $accessToken,
+					're_expired' => $reExpired,
+					'refresh_token' => $refreshToken,
+					'is_access_token_expired' => 0,
+					'version_no' => '1',
+					'last_login' => date('Y-m-d H:i:s'),
 			);
 			$uid = $accessUserM->addUserItem($userRow);
 		} else {//老用户更新.
@@ -180,7 +173,8 @@ class Access_Model_Taobao_Access
 		$this->_doLogin($uid);
 	}
 	
-	//获取登陆信息
+	
+	//从平台获取登陆信息
 	public static function getLoginUserInfo($code)
 	{
 		$baseUrl = Common::getBaseUrl();
@@ -200,10 +194,16 @@ class Access_Model_Taobao_Access
 	
 	private function _doLogin($uid)
 	{
-		Access_Model_Taobao_Session::getInstance($uid)->start();
-		$sid = Access_Model_Taobao_Session::getInstance($uid)->session_id();
-		Core_Model_Cookie::set('sid', $sid, time() + 3600, '/');
-		Core_Model_Cookie::set('uid', $uid, time() + 3600, '/');
+		$data = array(
+			'uid'=>$uid,
+		);
+		Access_Model_Taobao_Session::getInstance()->start($data);
+		$cookieInfo = Common::getCookieInfo();
+		Core_Model_Cookie::set('uid', $uid, time() + 3600, '/', $cookieInfo['domain']);
 	}
 	
+	private function _doLogout()
+	{
+		Access_Model_Taobao_Session::getInstance()->destroy();
+	}
 }

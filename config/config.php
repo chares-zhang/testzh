@@ -6,15 +6,28 @@ return array(
 		'timezone' => 'Asia/Shanghai',
 		'domain' => 'testzh.testzh.com',
 		'base_url' => 'http://testzh.testzh.com',
-		'static_url' => 'http://testzh.testzh.com/public/static',
+		'static_url' => 'http://testzh.testzh.com/static',
 		'default_route' => 'core/index/index',
 		//支持分布式memcached
 		'memcache' => array(
 			'mem_1' => array('host' => '127.0.0.1', 'port' => 11211, 'weight' => 100),
 // 			'mem_2' => array('host' => '127.0.0.1', 'port' => 11211, 'weight' => 100),
 		),
+		'memcached' => array(
+				'mem_1' => array('host' => '127.0.0.1', 'port' => 11211, 'weight' => 100),
+// 				'mem_2' => array('host' => '127.0.0.1', 'port' => 11211, 'weight' => 100),
+		),
+		'ocs' => array(
+// 				m.jst.ocs.aliyuncs.com:11211:3bcf0904054e11e3:jst_568999
+			'mem_1' => array('host' => 'm.jst.ocs.aliyuncs.com', 'port' => 11211, 'weight' => 100),
+		),
 		'session_save' => 'memcache',
-		'login_type' => 'single', //single单点登陆; multi
+		'session_name' => 'MYSID',
+		'login_type' => 'single', //single单点登陆; multi多点登陆
+		'layout_template' => 'core/page',
+	),
+	'content_block' => array(//例如 edit的block使用add的bock
+		
 	),
 	//平台信息
 	'plat_info' => array(
@@ -36,8 +49,14 @@ return array(
 	'cookie' => array(
 		'expire' => time()+3600*24,
 		'path' => '/',
-		'domain' => '.testzh.com'
+		'domain' => '.testzh.com',
+		'httponly' => true,
+		'issecure' => false,
+	),
+	'block' => array(
+		'index/add' => 'index/index',
 	),
 	
 );
+
 ?>

@@ -7,7 +7,13 @@ $(document).ready(function() {
 			$(this).removeClass("hover");
 		}
 	);
-	
+
+	$(".label-for").click(
+//		function() {
+//			$(this).addClass("current");
+//		}
+	);
+
 //	$(".label-for").toggle(
 //		function() {
 //			$(this).addClass("current");
@@ -16,61 +22,8 @@ $(document).ready(function() {
 //			$(this).removeClass("current");
 //		}
 //	);
-	
-	/* checkboxTree */
-	$("#checkboxTree input:checkbox").click(function(){
-		//子目录
-		var c = $(this).parent().find("input");
-		var b = $(this).attr('checked');
-		if (b == undefined) {
-			b = false;
-		}
-		c.each(function(){
-			$(this).attr('checked',b);
-		});
-		var m = $(this).parent().parent('ul').find('input');
-		var count = 0;
-		m.each(function(){
-			if($(this).attr('checked')){
-				count++;
-			}
-		});
-
-		//父目录
-		var p = $(this).parent().parentsUntil($("#checkboxTree"),'li');//父目录
-		p.each(function(){
-			
-			var pc = $(this).children('ul').children('li');
-			var pc_count = 0;//父目录中的各级子目录被选中的个数
-			pc.each(function(){
-				if($(this).children('input').attr('checked')){
-					pc_count++;
-				}
-			});
-			var o = $(this).find('input');
-			
-			if(count || pc_count){
-				o[0].checked = true;
-			}else{
-				o[0].checked = !o[0].checked;
-			}
-		});
-		$(this).attr('checked',b);
-	});
-
-	/*输入框*/
-	$(function(){
-		$('input').focus(function(){
-			$(this).css('border','1px solid #F89406	');
-		});
-		$('input').blur(function(){
-			$(this).css('border','1px solid #84BFEA');
-		});
-	});
-
 
 });
-
 // main code
 //window.MZ_CONSTANT = {};
 //window.MZ_CONSTANT.USER_LEVEL_0 = 1; // 免费

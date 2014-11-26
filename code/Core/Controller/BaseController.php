@@ -2,43 +2,78 @@
 
 class Core_BaseController extends AbstractController
 {
-	//uid
-	protected $uid;
-	//用户信息
-	public $userRow;
-
-	public $webhost;
-	public $staticurl;
-	
 	public function __construct()
 	{
 		parent::__construct();
-// 		$this->staticurl = Common::getConfigUrl('static_url');
-// 		$this->webhost = Common::getConfigUrl('base_url');
-		$uid = $this->_getLoginUid();
-		if ($uid) {//已登录
-			$this->uid = $uid;
-		} else {//未登陆，执行登陆流程
-			$this->_access();
-		}
-		//$where = "uid = '{$uid}'";
-		//$this->userRow = Common::M('Core_User')->getRow($where,"*",$uid);
-
-	}
-	
-	private function _getLoginUid()
-	{
 		$platName = Common::getPlatName();
 		$uid = Access_Model_Factory::factory($platName)->getLoginUid();
-		return $uid;
+		$userM = Common::getPlatModel('Access/user');
+		$userRow = $userM->getUserItem($uid);
+		if(!empty($userRow)) {
+			Common::setUserInfo($userRow);
+		}
 	}
 	
-	private function _access()
-	{
-		$config = Common::getConfig();
-		$platName = $config['plat_info']['plat_name'];
-		$uid = Access_Model_Factory::factory($platName)->access();
-	}
+// 	public function start()
+// 	{
+// 		@ini_set('session.save_handler', 'memcache');
+// 		session_save_path("tcp://127.0.0.1:11211?persistent=1&weight=100&timeout=10&retry_interval=10");
+// 		$sessionName = 'MY_SESSIONID';
+// 		session_name($sessionName);
+// 		$cookieInfo = array(
+// 				'expire' => time()+3600*24,
+// 				'path' => '/',
+// 				'domain' => '.testzh.com',
+// 				'issecure' => false,
+// 				'httponly' => true
+// 		);
+// 		$cookieParams = array(
+// 				'lifetime' => $cookieInfo['expire'],
+// 				'path'     => $cookieInfo['path'],
+// 				'domain'   => $cookieInfo['domain'],
+// 				'secure'   => $cookieInfo['issecure'],
+// 				'httponly' => $cookieInfo['httponly'],
+// 		);
+// 		call_user_func_array('session_set_cookie_params', $cookieParams);
+		
+// 		session_start();
+		
+// 		$uid = 999;
+// 		$_SESSION['uid'] = $uid;
+// 		var_dump($_SESSION);
+// 	}
+	
+// 	public function valid()
+// 	{
+// 		@ini_set('session.save_handler', 'memcache');
+// 		session_save_path("tcp://127.0.0.1:11211?persistent=1&weight=100&timeout=10&retry_interval=10");
+// 		$sessionName = 'MY_SESSIONID';
+// 		session_name($sessionName);
+// 		$cookieInfo = array(
+// 				'expire' => time()+3600*24,
+// 				'path' => '/',
+// 				'domain' => '.testzh.com',
+// 				'issecure' => false,
+// 				'httponly' => true
+// 		);
+// 		$cookieParams = array(
+// 				'lifetime' => $cookieInfo['expire'],
+// 				'path'     => $cookieInfo['path'],
+// 				'domain'   => $cookieInfo['domain'],
+// 				'secure'   => $cookieInfo['issecure'],
+// 				'httponly' => $cookieInfo['httponly'],
+// 		);
+// 		call_user_func_array('session_set_cookie_params', $cookieParams);
+// 		session_start();
+// 		var_dump($_SESSION);exit;
+// 	}
+	
+// 	private function _access()
+// 	{
+// 		$config = Common::getConfig();
+// 		$platName = $config['plat_info']['plat_name'];
+// 		$uid = Access_Model_Factory::factory($platName)->access();
+// 	}
 	
 // 	private function _getUser() 
 // 	{

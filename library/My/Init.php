@@ -9,16 +9,12 @@ define('CONFIG_PATH', APP_PATH . DS . 'config');
 define('LIBRARY_PATH', APP_PATH . DS . 'library');
 define('PUBLIC_PATH', APP_PATH . DS . 'public');
 define('TEMPLATE_PATH', APP_PATH . DS . 'template');
-// define('CONTROLLER_DIR', APP_PATH . DS . 'controllers');
-// define('MODEL_DIR', APP_PATH . DS . 'models');
 
 $paths[] = LIBRARY_PATH;
 $paths[] = LIBRARY_PATH . DS . 'My';
 $paths[] = LIBRARY_PATH . DS . 'top';
 $paths[] = LIBRARY_PATH . DS . 'top' . DS . 'request';
 $paths[] = CODE_PATH;
-// $paths[] = CONTROLLER_DIR;
-// $paths[] = MODEL_DIR;
 
 $appPath = implode(PS, $paths);
 set_include_path($appPath . PS . get_include_path());

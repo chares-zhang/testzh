@@ -9,8 +9,20 @@
 class Common{
 	private static $_config = array();
 	static private $_staticModel;
-
-    static public function getConfig($filename = 'config' )
+	static private $_staticBlock;
+	public static $userInfo;
+	
+	public static function setUserInfo($userInfo)
+	{
+		self::$userInfo = $userInfo;
+	}
+	
+	public static function getUserInfo()
+	{
+		return self::$userInfo;
+	}
+	
+    public static function getConfig($filename = 'config' )
     {
         if (empty(self::$_config[$filename])) {
             $file = CONFIG_PATH . "/{$filename}.php";
@@ -180,6 +192,34 @@ class Common{
 		return self::$_staticModel[$modelName];
 	}
 	
+	
+	public static function getBlock($blockName)
+	{
+		if(empty(self::$_staticBlock[$blockName])){
+			$config = self::getConfig();
+			if (isset($config['block'][$blockName])) {
+				$blockName = $config['block'][$blockName];
+			}
+			
+			$blockClassName = '';
+			if (strpos($blockName, '/')===false) {
+				$blockClassName = ucfirst($blockName);
+			}else{
+				$blockArr = explode('/', trim($blockName));
+				$blockArr[0] = $blockArr[0] . '_Block';
+				$blockClassName = str_replace(' ', '_',ucwords((implode(' ',$blockArr))));
+			}
+			if(class_exists($blockClassName)){
+				self::$_staticBlock[$blockName] = new $blockClassName();
+			}
+		}
+		if(empty(self::$_staticBlock[$blockName])){
+			echo "$blockName class not found ";
+			exit;
+		}
+		return self::$_staticBlock[$blockName];
+	}
+	
 	/**
 	 * 模板中指定站内跳转地址. eg.: $this->getUrl("module/controller/action",array('key1'=>'value1'));
 	 * @param string $routePath 例:[模块名]/[控制器名]/[方法名]
@@ -295,6 +335,43 @@ class Common{
 	}
 	
 	/**
+	 * 获取主要信息
+	 */
+	public static function getMainInfo()
+	{
+		$config = self::getConfig();
+		if (!isset($config['main_info'])) {
+			throw new Exception("config error:main_info not exist.");
+		}
+		return $config['main_info'];
+	}
+	
+	/**
+	 * 获取memcache信息
+	 */
+	public static function getMemcacheInfo()
+	{
+		$config = self::getConfig();
+		if (!isset($config['main_info'])) {
+			throw new Exception("config error:main_info not exist.");
+		}
+		if (!isset($config['main_info']['memcache'])) {
+			throw new Exception("config error:main_info。memcache not exist.");
+		}
+		return $config['main_info']['memcache'];
+	}
+	
+	public static function getCookieInfo()
+	{
+		$config = self::getConfig();
+		if (!isset($config['cookie'])) {
+			throw new Exception("config cookie not exist.");
+		}
+		
+		return $config['cookie'];
+	}
+	
+	/**
 	 * @TODO 未仔细斟酌
 	 * @param string $url
 	 * @param array  $data
@@ -331,7 +408,6 @@ class Common{
 			throw new Exception ("curl_init function not exist");
 		}
 	}
-	
 	
 
 	// 	public static function computeTableId($uid)
