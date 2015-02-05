@@ -126,7 +126,7 @@ class TopClient
 			} catch (Exception $e) {
 				$result->code = $e->getCode();
 				$result->msg = $e->getMessage();
-				return $result;
+				return ;
 			}
 		}
 		//组装系统参数
@@ -166,7 +166,7 @@ class TopClient
 			$this->logCommunicationError($sysParams["method"],$requestUrl,"HTTP_ERROR_" . $e->getCode(),$e->getMessage());
 			$result->code = $e->getCode();
 			$result->msg = $e->getMessage();
-			return $result;
+			return ;
 		}
 
 		//解析TOP返回结果
@@ -198,7 +198,7 @@ class TopClient
 			$this->logCommunicationError($sysParams["method"],$requestUrl,"HTTP_RESPONSE_NOT_WELL_FORMED",$resp);
 			$result->code = 0;
 			$result->msg = "HTTP_RESPONSE_NOT_WELL_FORMED";
-			return $result;
+			return ;
 		}
 
 		//如果TOP返回了错误码，记录到业务错误日志中

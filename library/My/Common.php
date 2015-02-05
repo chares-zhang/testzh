@@ -8,9 +8,26 @@
 
 class Common{
 	private static $_config = array();
-	static private $_staticModel;
-	static private $_staticBlock;
+	private static $_staticModel;
+	private static $_staticBlock;
+	private static $_theme;
 	public static $userInfo;
+	
+	public static function setTheme($theme)
+	{
+		self::$_theme = $theme;
+	}
+	
+	public static function getTheme()
+	{
+		if (empty(self::$_theme)) {
+			$mainInfo = self::getMainInfo();
+			$theme = $mainInfo['layout_theme'];
+			self::setTheme($theme);
+			return $theme;
+		}
+		return self::$_theme;
+	}
 	
 	public static function setUserInfo($userInfo)
 	{
@@ -317,6 +334,18 @@ class Common{
 		}
 	}
 	
+	//获取top接口url
+	public static function getGatewayUrl()
+	{
+		$config = self::getConfig();
+		$isSandbox = $config['plat_info']['is_sandbox'];
+		if ($isSandbox == true) {
+			return $config['plat_info']['sandbox_gateway_url'];
+		} else {
+			return $config['plat_info']['gateway_url'];
+		}
+	}
+
 	/**
 	 * 获取默认路径
 	 * @throws Exception

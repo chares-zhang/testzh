@@ -38,10 +38,10 @@ class IsvCron extends AbstractCron
 		);
 
 		$num = $newUserNum = $newAppNum = 0;
-//		$spiderM = Common::M('Spider');
-		$isvRuleM = Common::M('Admin_IsvRule');
-		$topUserM = Common::M('Admin_TopUser');
-		$topUserAppM = Common::M('Admin_TopUserApp');
+		$spiderM = Common::getModel('Spider');
+		$isvRuleM = Common::getModel('admin/isvRule');
+		$topUserM = Common::getModel('admin/topUser');
+		$topUserAppM = Common::getModel('admin/topUserApp');
 		
 		foreach($urls as $urlPath){
 			$pages = range(1,30);
@@ -49,7 +49,7 @@ class IsvCron extends AbstractCron
 			$n = 0;
 			foreach($pages as $page){
 				$url = $urlPath . $page;
-				$contents = Spider::getHtml($url);
+				$contents = $spiderM::getHtml($url);
 				$dataRows = $isvRuleM->getIsv($contents);
 				foreach($dataRows as $data){
 					//echo $n."::".$num++."\n";
@@ -98,10 +98,10 @@ class IsvCron extends AbstractCron
 	{
 		$start = $this->microtime_float();
 		
-//		$spiderM = Common::M('Spider');
-		$isvRuleM = Common::M('Admin_IsvRule');
-		$topUserM = Common::M('Admin_TopUser');
-		$topUserAppM = Common::M('Admin_TopUserApp');
+		$spiderM = Common::getModel('Spider');
+		$isvRuleM = Common::getModel('admin/isvRule');
+		$topUserM = Common::getModel('admin/topUser');
+		$topUserAppM = Common::getModel('admin/topUserApp');
 		
 		//获取应用的详细信息
 		unset($appRow);
@@ -109,7 +109,7 @@ class IsvCron extends AbstractCron
 		$appRows = $topUserAppM->getTopUserAppRows();
 		foreach($appRows as $key => $appRow){
 			$url = $appRow['detail_url'];
-			$contents = Spider::getHtml($url);
+			$contents = $spiderM::getHtml($url);
 			$appDetail = array();
 			$appDetail = $isvRuleM->getAppDetail($contents);
 			//更新user
@@ -140,9 +140,9 @@ class IsvCron extends AbstractCron
 		$date = date('Y-m-d');
 		$yestoday = date('Y-m-d',strtotime($date)-86400);
 
-		$topUserM = Common::M('Admin_TopUser');
-		$topUserAppM = Common::M('Admin_TopUserApp');
-		$topIsvTraceM = Common::M('Admin_TopIsvTrace');
+		$topUserM = Common::getModel('admin/topUser');
+		$topUserAppM = Common::getModel('admin/topUserApp');
+		$topIsvTraceM = Common::M('admin/topIsvTrace');
 
 		//跟踪应用的参数
 		unset($appRow);

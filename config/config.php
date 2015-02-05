@@ -25,6 +25,7 @@ return array(
 		'session_name' => 'MYSID',
 		'login_type' => 'single', //single单点登陆; multi多点登陆
 		'layout_template' => 'core/page',
+		'layout_theme' => 'base',
 	),
 	'content_block' => array(//例如 edit的block使用add的bock
 		
@@ -35,14 +36,16 @@ return array(
 		'oauth_url' => 'https://oauth.taobao.com/authorize',
 		'token_url' => 'https://oauth.taobao.com/token',
 		'app_key' => '21585000',
-		'app_secret' => '458f0167cf7fe485ed1d5bdb006aa8d2',
-		
+		'app_secret' => '9830fe6191583ea9dc977ab0a35b19ef',
+		'gateway_url' => 'http://gw.api.taobao.com/router/rest',
+
 		'sandbox_oauth_url' => 'https://oauth.tbsandbox.com/authorize',
 		'sandbox_token_url' => 'https://oauth.tbsandbox.com/token',
-		'sandbox_app_key' => '1021573922',
-		'sandbox_app_secret' => 'sandbox605318536af01cf6196695c9a',
+		'sandbox_app_key' => '1021585000',
+		'sandbox_app_secret' => 'sandbox7cf7fe485ed1d5bdb006aa8d2',
+		'sandbox_gateway_url' => 'http://gw.api.tbsandbox.com/router/rest',
 		
-		'is_sandbox' => false,
+		'is_sandbox' => true,
 		'db_group' => 'plat_name_taobao',//每个平台不同数据库分组
 	),
 	//cookie信息

@@ -67,18 +67,7 @@ $(document).ready(function() {
 			$(this).css('border','1px solid #84BFEA');
 		});
 	});
-	
-	$(".nav").click(function(){
-		$(this).parent("li").addClass("current").children(".subContent").slideToggle("fast").siblings(".subContent").slideUp(200);
-		$(this).parent("li").siblings().removeClass("current").children(".subContent").slideUp("fast").siblings(".subContent").slideToggle(200);
-		//删除所有子导航的active类
-		// $(".subContent > li").removeClass("active");
-	});
-	
-	$(".subContent > li").click(function(){
-		// $(this).addClass("active");
-		// $(this).siblings().removeClass("active");
-	});
+
 
 });
 

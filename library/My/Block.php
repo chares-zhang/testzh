@@ -36,6 +36,10 @@ abstract class My_Block
     	return $block -> toHtml(); 
     }
     
+    public function toHtml()
+    {
+    	return '';
+    }
     
 //     public function loadLayout()
 //     {

@@ -14,16 +14,17 @@ class Core_Block_Template extends My_Block
 	 */
 	public function setTemplete($filename,$isCommon=false)
 	{
+		$theme = Common::getTheme();
 		if ($isCommon) {
 			if (strpos($filename, '/')===false) {
-				$this->template = TEMPLATE_PATH . DS . "{$filename}.phtml";
+				$this->template = TEMPLATE_PATH . DS . $theme . DS . "{$filename}.phtml";
 			} else {
 				$fileArr = explode('/', $filename);
 				$filename = str_replace(' ', DS,(implode(' ',$fileArr)));
-				$this->template = TEMPLATE_PATH . DS . "{$filename}.phtml";
+				$this->template = TEMPLATE_PATH . DS . $theme . DS . "{$filename}.phtml";
 			}
 		} else {
-			$this->template = TEMPLATE_PATH . DS . strtolower($this->module . DS . $this->controller . DS . "{$filename}.phtml");
+			$this->template = TEMPLATE_PATH . DS . $theme . DS . strtolower($this->module . DS . $this->controller . DS . "{$filename}.phtml");
 		}
 	}
 	

@@ -21,7 +21,13 @@ class Core_UiController extends Core_BaseController
 	
 	public function suiAction()
 	{
-		$this->loadLayout();
+		$this->loadLayout('core/ui_sui');
+		$this->renderLayout();
+	}
+
+	public function myuiAction()
+	{
+		$this->loadLayout('core/ui_myui');
 		$this->renderLayout();
 	}
 }

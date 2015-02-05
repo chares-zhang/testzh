@@ -1,0 +1,44 @@
+<!-- #menu -->
+<div id="menu">
+	<ul class="navBox">
+		<li class="">
+			<a href="<?php echo Common::getUrl('core/index/index',array('test'=>1));?>" class="nav"><span class="nav-left">首页</span></a>
+			
+		</li><div class="clear"></div>
+		<li class="<?php if($this->inModule(array('tools'))){echo 'current';}?>">
+			<a href="#" class="nav"><span class="nav-left">商品管理</span><span class="nav-right">></span></a>
+			<ul class="subContent" style="<?php if($this->inModule(array('tools'))){echo '';}else{echo 'display:none';}?>">
+				<?php
+					$mobiledetailMenu = array('tools'=>array('mobiledetail'));
+				?>
+				<li class="<?php if($this->inController($mobiledetailMenu)){echo 'active';}?>">
+					<a href="<?php echo Common::getUrl('tools/mobiledetail/index',array('test'=>1));?>" class="subNav"><span>手机详情</span></a>
+				</li>
+				<?php
+					$showcaseMenu = array('tools'=>array('showcase'));
+				?>
+				<li class="<?php if($this->inController($showcaseMenu)){echo 'active';}?>">
+					<a href="<?php echo Common::getUrl('tools/showcase/index',array('test'=>1));?>" class="subNav"><span>自动橱窗</span></a>
+				</li>
+			</ul>
+		</li>
+		<li class="<?php if($this->inModule(array('trade'))){echo 'current';}?>">
+			<a href="#" class="nav"><span class="nav-left">订单管理</span><span class="nav-right">></span></a>
+			<ul class="subContent" style="<?php if($this->inModule(array('trade'))){echo '';}else{echo 'display:none';}?>">
+				<?php
+					$sendgoodsMenu = array('trade'=>array('sendgoods'));
+				?>
+				<li class="<?php if($this->inController($sendgoodsMenu)){echo 'active';}?>">
+					<a href="<?php echo Common::getUrl('trade/sendgoods/index',array('test'=>1));?>" class="subNav"><span>自动发货</span></a>
+				</li>
+				<?php
+					$rateMenu = array('trade'=>array('rate'));
+				?>
+				<li class="<?php if($this->inController($rateMenu)){echo 'active';}?>">
+					<a href="<?php echo Common::getUrl('trade/rate/index',array('test'=>1));?>" class="subNav"><span>自动评价</span></a>
+				</li>
+			</ul>
+		</li>
+	</ul>
+</div>
+<!-- end of #header -->

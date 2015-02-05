@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>test</title>
+	<link rel="SHORTCUT ICON" href="http://meizhe.goodtp.com/static/i/favicon.ico">
+	<!-- Meta Tags -->
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+	
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<script type="text/javascript" src="<?php echo $this->staticurl;?>/js/head.load.min.js"></script>
+    <script type="text/javascript">
+    	head.js({libs: "<?php echo $this->staticurl;?>/js/lib.min.js?ver=11"},
+	    		"<?php echo $this->staticurl;?>/js/script.js?");
+    </script>
+</head>
+
+<body id="mixlistPage" style="min-height: 730px;">
+<!-- #header -->
+
+<input type="hidden" id="tb_shop_type" value="C">
+<div id="header">
+	<div class="inner">
+		<a href="http://meizhe.goodtp.com/" id="logo"><img src="./static/i/logo.png" height="35"></a>
+		
+		<ul id="mainMenu" class="topMenu">
+			<li class="lv1"><a href="./static/要打折，用美折.htm" class="active">活动列表</a></li>
+			<li class="lv1">
+				<a href="javascript:;" class="highlight">创建新活动<span class="">▼</span></a>
+				<ul class="subMenu" style="display: none; width: 130px; top: 45px;">
+					<li class="lv2">
+						<a href="<?php echo $this->getUrl('*/*/zhekou'); ?>">折扣/减价</a>
+						<div class="intro">
+							<div class="arrow"></div>
+							<h4>介绍：</h4>
+							<div class="p">
+								不限活动时间：打折十年都可以。<br>
+								不限活动折扣：零到十折任您选。
+							</div>
+							<h4>效果图：</h4>
+							<div class="imageWrapper">
+								<img src="./static/i/dazhe_demo.png">
+							</div>
+						</div>
+					</li>
+					<li class="lv2">
+						<a href="http://meizhe.goodtp.com/huodong/mjs-new">满减/满就包邮</a>
+						<div class="intro wider">
+							<div class="arrow"></div>
+							<h4>介绍：</h4>
+							<div class="p">
+								满XX元/件 打折/减价/包邮/送礼物，随意设置！<br>
+								交易记录显示原价
+							</div>
+							<h4>效果图：</h4>
+							<div class="imageWrapper">
+								<img src="./static/i/mjs_demo.png">
+							</div>
+						</div>
+					</li>
+                    <li class="lv2">
+                        <a href="http://meizhe.goodtp.com/huodong/zhekou-new?type=f">全店打折</a>
+                        <div class="intro">
+                            <div class="arrow"></div>
+                            <h4>介绍：</h4>
+                            <div class="p">
+                                全店所有商品同时打同一个折扣
+                            </div>
+                        </div>
+                    </li>
+                    <li class="lv2">
+                        <a href="http://meizhe.goodtp.com/huodong/mjs-new?type=f">全店满减/包邮</a>
+                        <div class="intro">
+                            <div class="arrow"></div>
+                            <h4>介绍：</h4>
+                            <div class="p">
+                                全店所有商品同时参加同一个<br>满减/满就包邮/送礼物活动
+                            </div>
+                        </div>
+                    </li>
+
+				</ul>
+			</li>
+			<li class="lv1"><a href="http://meizhe.goodtp.com/show" class="zkzqBtn">折扣专区</a></li>
+			<li class="lv1">
+				<a href="javascript:;" class="gjxBtn">工具箱
+                <span class="">▼</span></a>
+				<ul class="subMenu" style="display: none; width: 99px; top: 45px;">
+					<li class="lv2">
+						<a href="http://meizhe.goodtp.com/huodong/postfee-index">改邮费</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+		<ul id="rightMenu" class="topMenu">
+			<li class="lv1">
+				<a href="javascript:;" class="userMenu">
+				    <?php echo $this->t['userRow']['nick'];?>
+                    <img src="./static/i/crown_gold.png" title="高级版到期时间 2013-07-12 00:00:00 美折到期时间 2013-10-25 00:00:00">
+				</a>
+				<ul class="subMenu" style="display: none; width: 103px; top: 45px;">
+					<li class="lv2"><a href="http://meizhe.goodtp.com/user/info">账户信息</a></li>
+					<li class="lv2"><a href="http://meizhe.goodtp.com/user/sub">子账号管理</a></li>
+					<li class="lv2"><a href="<?php echo $this->getUrl('*/*/logout');?>">退出</a></li>
+				</ul>
+			</li>
+            
+            <li class="lv1">
+            	<input type="hidden" id="tb_version" value="2">
+                <a href="http://meizhe.goodtp.com/user/upgrade" class="upgradeLink" data-ga="true" data-ga-name="xuding_gaojiban">续订高级版</a>
+            </li>
+                
+			<li class="lv1">
+				<a href="http://meizhe.goodtp.com/partner/choujiang" class="inviteLink" data-ga="true" data-ga-name="meizhe_choujiang">抽奖</a>
+			</li>
+                
+            
+		</ul>
+	</div>
+</div>
+
+<!-- end of #header -->

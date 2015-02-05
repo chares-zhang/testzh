@@ -1,10 +1,15 @@
 <?php
-
+/**
+ * 自动橱窗
+ * @author chares
+ *
+ */
 class Tools_ShowcaseController extends Core_BaseController 
 {
 	public function indexAction()
 	{
-		
+		$this->loadLayout();
+		$this->renderLayout();
 	}
 	
 	public function recommendAction() 

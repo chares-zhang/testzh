@@ -1,0 +1,261 @@
+/**  @base  **/
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, legend, button, input, textarea, p, blockquote, th, td {
+    margin: 0;
+    padding: 0;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+img {
+    border: 0 none;
+}
+ol, ul {
+    list-style: none outside none;
+}
+a {
+    text-decoration: none;
+	color:#34495E;
+}
+a:focus {
+    outline: medium none;
+}
+input,textarea,select,button {
+	outline:none;
+	resize:none
+}
+.clear{
+	clear:both;
+}
+.number{
+	font-family:"Arial";
+}
+/* button, input, select, textarea { font-size: 100%; }  使得表单元素在 ie 下能继承字体大小 */
+
+/**  @common  **/
+.w-100{
+	width:100px;
+}
+.w-120{
+	width:120px;
+}
+.w-150{
+	width:150px;
+}
+.w-180{
+	width:180px;
+}
+.w-240{
+	width:240px;
+}
+.w-300{
+	width:300px;
+}
+.line-height-20{
+	height:20px;
+}
+.input-radio{
+	height:40px;
+	line-height:40px;
+	vertical-align:middle;
+}
+.input-text{
+	height:40px;
+	line-height:40px;
+	padding:0;
+	font-size:16px;
+	font-family:"微软雅黑",Arial;
+	border:1px solid #84BFEA;
+}
+.float-left{
+	float:left;
+}
+a.blueBtn{
+	font-size:24px;
+	height:60px;
+	line-height:60px;
+	padding:0 25px;
+	background:#36a9e1;
+	font-family:"微软雅黑";
+	color:#ffffff;
+	display:inline-block;
+	text-align:center;
+}
+a.blueBtn:hover{
+	background:#1e8fc6;
+}
+
+.icon{
+	background-image: url(../i/imgs.gif); background-repeat: no-repeat;
+}
+
+/**  @main  **/
+body {
+    font: 14px/1.75 "微软雅黑",Arial,sans-serif;
+    height: 100%;
+	color:#34495E;
+	background:#F0F0F0;
+}
+h1, h2, h3, h4, h5, h6 { font-size: 100%; }
+h1{
+	font-weight:normal;
+	font-size:16px;
+}
+/**  #header  **/
+#header{
+	width:100%;
+	background:#485B7F;
+	height:50px;
+	line-height:50px;
+}
+
+#wrap{
+	margin:0 auto;
+	width:1000px;
+	min-width:1000px;
+}
+
+/**  #container  **/
+#container{
+	margin-top:10px;
+}
+
+/**  #menu  **/
+#menu{
+	float:left;
+	width:180px;
+	
+	/*box-shadow:0 1px 4px rgba(0, 0, 0, 0.067);投影*/
+}
+#menu ul.nav{
+
+}
+#menu ul.nav li{
+	text-align:left;
+	
+	/*box-shadow:0 1px 4px rgba(0, 0, 0, 0.067);*/
+}
+#menu ul.nav li a{
+	height:50px;
+	line-height:50px;
+	background:#FFFFFF;
+	display:block;
+	width:180px;
+	font-size:16px;
+	border-bottom:#F1F1F1 1px solid;
+}
+#menu ul.nav li.first-child > a{
+	border-radius: 6px 6px 0 0;
+}
+#menu ul.nav li.last-child > a{
+	border-radius: 0 0 6px 6px;
+}
+#menu ul.nav li a:hover{
+	background:#07BEED;
+	color:#FFFFFF;
+}
+#menu ul.nav li.current a{
+	background:#07BEED;
+	color:#FFFFFF;
+}
+#menu .label{
+	font-size:14px;
+	color:#FFFFFF;
+	background:#F89406;
+	margin-left:10px;
+	padding:2px 7px 2px 6px;
+	border-radius: 8px;
+}
+#menu .title{
+	padding-left:20px;
+}
+
+
+/**  #content  **/
+#content{
+	width:auto;
+	margin-left:192px;
+	background:#FFFFFF;
+	padding:10px;
+	border-radius: 6px;
+}
+.box-title{
+	border-bottom:1px solid #DDDDDD;
+	padding:7px 0;
+}
+.breadcrumbs{
+	background:#f9f9f9; 
+	height:38px; 
+	line-height:38px;
+	margin-top:10px;
+}
+.breadcrumbs span{
+	margin-left:20px;
+}
+.breadcrumbs span b{
+	font-family:"Arial";
+	color:#07BEED;
+	margin-left:10px;
+}
+.main-form{
+	margin-top:20px;
+}
+.main-form .form-line{
+	margin-left:20px;
+}
+.main-form .operation{
+	background:#f9f9f9;
+	padding:10px 0 10px 150px;
+}
+
+
+.main-form .form-line label.label-name{
+	float:left;
+	height:40px;
+	line-height:40px;
+}
+.main-form .form-line label.label-for{
+	cursor:pointer;
+	height:36px;
+	line-height:36px;
+	margin:0 5px;
+	padding:5px 10px;
+	border-radius:6px;
+}
+.main-form .form-line label.hover,.main-form .form-line label.current{
+	background:#07BEED;
+	color:#ffffff;
+}
+.main-form .form-line .append {
+    background: none repeat scroll 0 0 #F2FDEC;
+    color: #999999;
+    display: inline;
+    height: 40px;
+    line-height: 40px;
+	margin: 0 0 0 15px;
+    padding: 10px 10px;
+	font-size:15px;
+}
+.main-form .form-line .controls{
+	
+}
+.main-form .form-line .controls-line{
+	margin-left:130px;
+}
+
+/** checkboxTree **/
+.grade-1{
+	padding-left:18px;
+}
+#checkboxTree label{
+	padding-left:10px;
+}
+
+/**  #footer  **/
+#footer{
+	margin:50px auto 0 auto;
+	text-align:center;
+	border-top:1px solid #E5E5E5;
+	padding:30px 0;
+	background:#FFFFFF;
+}

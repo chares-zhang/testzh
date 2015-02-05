@@ -4,6 +4,23 @@ class Core_IndexController extends Core_BaseController
 {
 	public function indexAction() 
 	{
+		// $taobao = Common::getModel('core/taobao');
+		// $tbSession = '6201f141a3c876e24c1040ZZ245aabaca59539413242df61769384252';
+		
+		// $numIid = '22466447540';
+		// $fields = 'title,desc_modules,price,pic_url,desc,sku,is_fenxiao,approve_status,is_virtual';
+		// $req = new ItemGetRequest;
+		// $req->setFields($fields);
+		// $req->setNumIid($numIid);
+		// try{
+		// 	$taobao->format = 'json';
+		// 	$resp = $taobao->execute($req);
+		// 	var_dump($resp);
+		// 	exit;
+		// }catch(Exception $e){
+		//     var_dump($e);exit;
+		// }
+		
 		$this->loadLayout();
 		$this->renderLayout();
 		
@@ -18,6 +35,11 @@ class Core_IndexController extends Core_BaseController
 // 		include $this->template('index');
 	}
 	
+	public function logout()
+	{
+		Access_Model_Taobao_Session::getInstance()->destroy();
+	}
+
 	public function syncAction()
 	{
 		echo 'syncAction';
