@@ -7,22 +7,28 @@
 	
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<!-- 
 	<link href="http://g.alicdn.com/sj/dpl/1.4.3/css/sui.min.css" rel="stylesheet">
-	-->
 	<link type="text/css" rel="stylesheet" href="<?php echo $this->getStaticUrl();?>/css/myui.css" media="all">
 	<link type="text/css" rel="stylesheet" href="<?php echo $this->getStaticUrl();?>/css/main.css" media="all">
 	
-	
-	<script type="text/javascript" src="<?php echo $this->getStaticUrl();?>/js/head.load.min.js"></script>
+	<script type="text/javascript" src="<?php echo $this->getStaticUrl();?>/js/head.js"></script>
     <script type="text/javascript">
+    	/*
+	    head.test((head.browser.ie && head.browser.version <= 8),
+				  [], 
+				  ["<?php echo $this->getStaticUrl();?>/js/ie9.js"],
+				  function() {
+				  }
+		);
+	*/
     	head.js({libs: "<?php echo $this->getStaticUrl();?>/js/dzg_lib.min.js?ver=11"},
 	    		"<?php echo $this->getStaticUrl();?>/js/script.js",
-	    		"<?php echo $this->getStaticUrl();?>/js/myui.js");
+	    		"<?php echo $this->getStaticUrl();?>/js/myui.js",
+	    		"http://g.alicdn.com/sj/dpl/1.4.3/js/sui.min.js");
     </script>
 </head>
 
-<body>
+<body id="<?php echo $this->getBodyId();?>">
 <!-- #header -->
 <div id="header">
 	<div id="logo">

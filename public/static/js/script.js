@@ -59,14 +59,14 @@ $(document).ready(function() {
 	});
 
 	/*输入框*/
-	$(function(){
-		$('input').focus(function(){
-			$(this).css('border','1px solid #F89406	');
-		});
-		$('input').blur(function(){
-			$(this).css('border','1px solid #84BFEA');
-		});
-	});
+//	$(function(){
+//		$('input').focus(function(){
+//			$(this).css('border','1px solid #F89406	');
+//		});
+//		$('input').blur(function(){
+//			$(this).css('border','1px solid #84BFEA');
+//		});
+//	});
 	
 	$(".nav").click(function(){
 		$(this).parent("li").addClass("current").children(".subContent").slideToggle("fast").siblings(".subContent").slideUp(200);
@@ -75,10 +75,22 @@ $(document).ready(function() {
 		// $(".subContent > li").removeClass("active");
 	});
 	
-	$(".subContent > li").click(function(){
-		// $(this).addClass("active");
-		// $(this).siblings().removeClass("active");
-	});
+	
+	var bodyId = $("body").attr("id");
+	switch(bodyId){
+		case 'tools_mobiledetail_index':
+			var mobliledetailViewModel = function() {
+				var self = this;
+				
+				
+			};
+			
+			ko.
+			
+			break;
+	
+	}
+	
 
 });
 

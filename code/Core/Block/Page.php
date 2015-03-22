@@ -14,5 +14,10 @@ class Core_Block_Page extends Core_Block_Template
 		return $mainInfo['static_url'];
 	}
 	
+	public function getBodyId()
+	{
+		$bodyId = $this->module . '_' . $this->controller . '_' . $this->action;
+		return $bodyId;
+	}
 	
 }

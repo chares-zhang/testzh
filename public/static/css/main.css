@@ -36,27 +36,6 @@ input,textarea,select,button {
 /* button, input, select, textarea { font-size: 100%; }  使得表单元素在 ie 下能继承字体大小 */
 
 /**  @common  **/
-.w-30{
-	width:30px;
-}
-.w-100{
-	width:100px;
-}
-.w-120{
-	width:120px;
-}
-.w-150{
-	width:150px;
-}
-.w-180{
-	width:180px;
-}
-.w-240{
-	width:240px;
-}
-.w-300{
-	width:300px;
-}
 .line-height-20{
 	height:20px;
 }
@@ -144,12 +123,20 @@ h1{
 /**  #container  **/
 #container{
 	margin-top:10px;
+    position: relative;
+    width: 1190px;
+    z-index: 18;
 }
 
 /**  #menu  **/
 #menu{
-	float:left;
-	width:180px;
+    height: 100%;
+    left: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: absolute;
+    width: 192px;
+    z-index: 19;
 	/*box-shadow:0 1px 4px rgba(0, 0, 0, 0.067);投影*/
 }
 #menu ul.navBox{
@@ -230,14 +217,13 @@ h1{
 
 /**  #content  **/
 #content{
-	width:auto;
-	margin-left:192px;
 	background:#FFFFFF;
-	padding:10px;
-	/*border-radius: 6px;*/
+	margin-left: auto;
+    min-height: 748px;
+	padding-left:10px;
+    width: 988px;
 }
 .box-title{
-	border-bottom:1px solid #DDDDDD;
 	padding:7px 0;
 	margin-bottom:10px;
 }

@@ -8,8 +8,11 @@
 <link href="http://g.alicdn.com/sj/dpl/1.4.3/css/sui.min.css" rel="stylesheet">
 <script type="text/javascript" src="http://g.alicdn.com/sj/lib/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="http://g.alicdn.com/sj/dpl/1.4.3/js/sui.min.js"></script>
+
 </head>
 <body>
+
+
 
 <p>表单</p>
 <form class="sui-form form-horizontal">
@@ -147,5 +150,47 @@
 <input checked="checked" type="checkbox"><span>鸣人</span>
 </label>
 
+
+<ul class="sui-nav nav-tabs nav-large">
+	<li class="active"><a data-toggle="tab" href="#demo3">示例</a></li>
+	<li><a data-toggle="tab" href="#code3">代码</a></li>
+	<li><a data-toggle="tab" href="#doc3">文档</a></li>
+</ul>
+<p>时间控件</p>
+    <form class="sui-form form-horizontal">
+    <div id="demo4" class="control-group input-daterange">
+    <label class="control-label">时间选择：</label>
+    <div class="controls">
+    <input class="input-medium input-date" type="text"><span>-</span>
+    <input class="input-medium input-date" type="text">
+    </div>
+    </div>
+    </form>
+
+<script type="text/javascript">
+alert('1');
+// $('#demo4.input-daterange').click(function () {
+// 	alert('2');
+// });
+$('#demo4.input-daterange').datepicker({
+    beforeShowDay: function(date) {
+        if (date.getMonth() == (new Date()).getMonth())
+            switch (date.getDate()) {
+                case 4:
+                    return {
+                        tooltip: 'Example tooltip',
+                        classes: 'active'
+                    };
+                case 8:
+                    return false;
+                case 12:
+                    return "green";
+            }
+    }
+});
+
+$('#demo4').datepicker({});
+</script>
+    
 </body>
 </html>

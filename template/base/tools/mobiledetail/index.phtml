@@ -1,68 +1,145 @@
 <!-- #content -->
 <div id="content">
-<div style="width:980px;">
-	<div class="box-title">
-		<h1>手机详情</h1>
+	<div style="width: 980px;">
+		<div class="">
+			<h1>
+				<ul class="sui-breadcrumb">
+					<li><a href="#">商品管理</a></li>
+					<li><a href="#">手机详情</a></li>
+				</ul>
+			</h1>
+		</div>
+		<ul class="sui-nav nav-tabs nav-large">
+			<li class="active"><a data-toggle="tab" href="#demo3">出售中</a></li>
+			<li><a data-toggle="tab" href="#code3">仓库中</a></li>
+			<li><a data-toggle="tab" href="#doc3">已生成</a></li>
+		</ul>
+
+		<div style="margin-top: -10px;" class="sui-form" id="deschide">
+			<span class="sui-dropdown dropdown-bordered dropdown-large select">
+				<span class="dropdown-inner">
+					<a id="select" role="button" href="javascript:void(0);" data-toggle="dropdown" class="dropdown-toggle">
+						<input value="" name="ocategory" type="hidden" onchange="oselectfunc(this.value)">
+						<i class="caret"></i><span>全部</span>
+					</a>
+					<ul role="menu" aria-labelledby="drop4" class="sui-dropdown-menu ocategory" name="ocategory" style="max-height: 300px; overflow-y: auto;">
+						<li role="presentation" class="active">
+							<a role="menuitem" tabindex="-1" href="javascript:void(0);" value="bj">全部</a>
+						</li>
+					</ul>
+				</span>
+			</span>
+			<div class="input-control control-right">
+				<input style="margin-left: 5px; width: 150px;" class="input-fat" type="search" name="search1" id="osearchs1" value="" placeholder="商家编码" data-inline="true" onkeypress="event.keyCode==13?obbsearch():'';">
+					<i class="sui-icon icon-touch-magnifier"></i>
+			</div>
+			<div class="input-control control-right">
+				<input style="margin-left: 5px; width: 150px" class="input-fat" type="search" name="search" id="osearchs" value="" placeholder="宝贝关键词" data-inline="true" onkeypress="event.keyCode==13?obbsearch():'';">
+				<i class="sui-icon icon-touch-magnifier"></i>
+			</div>
+			<button style="margin-left: 15px;" class="sui-btn btn-primary btn-large" onclick="obbsearch()">搜索</button>
+			<div id="page" style="display: inline-block; float: right;"></div>
+		</div>
+
+		<div class="ui-sortable">
+			<table class="sui-table table-bordered table-zebra ">
+				<thead>
+					<tr>
+						<th style="width:18px;">
+							<div class="center">
+								<label class="checkbox-pretty inline checked" data-toggle="checkbox">
+								<input type="checkbox" checked="checked"><span contenteditable="true"></span>
+								</label>
+							</div>
+						</th>
+						<th style="width: 52px;">主图</th>
+						<th style="width: 40%;">标题</th>
+						<th></th>
+						<th>新的一列</th>
+						<th>新的一列</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<div class="center">
+								<label class="checkbox-pretty inline checked" data-toggle="checkbox">
+								<input type="checkbox" checked="checked"><span contenteditable="true"></span>
+								</label>
+							</div>
+						</td>
+						<td>
+							<div class="center">
+								<a href=""><img style="margin: 0; height:60px; width:60px;" alt="商品图片" src="http://img03.taobaocdn.com/bao/uploaded/i3/T1DgHZXmNdXXXgMAwT_012514.jpg_60x60.jpg"></a>
+		                	</div>
+		                </td>
+						<td>999</td>
+						<td>99999.00</td>
+						<td>99999.00</td>
+						<td>99999.00</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="center">
+								<label class="checkbox-pretty inline checked" data-toggle="checkbox">
+								<input type="checkbox" checked="checked"><span contenteditable="true"></span>
+								</label>
+							</div>
+						</td>
+						<td>9999.00</td>
+						<td>999</td>
+						<td>99999.00</td>
+						<td>99999.00</td>
+						<td>99999.00</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="center">
+								<label class="checkbox-pretty inline checked" data-toggle="checkbox">
+								<input type="checkbox" checked="checked"><span contenteditable="true"></span>
+								</label>
+							</div>
+						</td>
+						<td>9999.00</td>
+						<td>999</td>
+						<td>99999.00</td>
+						<td>99999.00</td>
+						<td>99999.00</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="center">
+								<label class="checkbox-pretty inline checked" data-toggle="checkbox">
+								<input type="checkbox" checked="checked"><span contenteditable="true"></span>
+								</label>
+							</div>
+						</td>
+						<td>9999.00</td>
+						<td>999</td>
+						<td>99999.00</td>
+						<td>99999.00</td>
+						<td>99999.00</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<div class="sui-pagination pagination-large center">
+			<ul>
+				<li class="prev disabled"><a href="#">«上一页</a></li>
+				<li class="active"><a href="#">1</a></li>
+				<li><a href="#">2</a></li>
+				<li><a href="#">3</a></li>
+				<li><a href="#">4</a></li>
+				<li><a href="#">5</a></li>
+				<li class="dotted"><span>...</span></li>
+				<li class="next"><a href="#">下一页»</a></li>
+			</ul>
+			<div><span>共10页&nbsp;</span><span>
+			到
+			<input class="page-num" type="text"><button class="page-confirm" onclick="alert(1)">确定</button>
+			页</span></div>
+		</div>
+
 	</div>
-	<div class="myui-btn-group">
-		<a class="myui-btn btn-xxlarge btn-primary" href="javascript:void();">出售中</a><a class="myui-btn btn-xxlarge" href="javascript:void();">仓库中</a>
-	</div>
-	<table class="myui-table table-bordered" style="border:1px solid #e6e6e6;">
-	  <thead>
-	    <tr>
-	      <th colspan="5"> 
-	        <label class="checkbox pull-left">
-	          <input type="checkbox">订单编号：7867473872181848
-	        </label><span class="pull-right">成交时间：2014-01-11 11:59</span>
-	      </th>
-	    </tr>
-	  </thead>
-	  <tbody>
-	    <tr>
-	      <td width="50%">
-	        <div class="typographic"><img style="width:50px;height:50px;" src="http://img02.tbsandbox.com/bao/uploaded/i2/TB1mvOKXXXXXXb9XXXXXXXXXXXX_!!2-item_pic.png_50x50.jpg"><a href="#" class="block-text" style="width:200px;">包邮 正品玛姬儿压缩面膜无纺布纸膜100粒 送泡瓶面膜刷喷瓶 新款</a><span>1</span>
-	        </div>
-	      </td>
-	      <td rowspan="1" class="center" width="11%">56.50</td>
-	      <td rowspan="1" class="center" width="13%">
-	        <ul class="unstyled">
-	          <li>交易成功</li>
-	          <li><a href="#">订单详情</a></li>
-	          <li><a href="#">对方已评</a></li>
-	        </ul>
-	      </td>
-	      <td rowspan="1" class="center" width="13%"><a href="#" class="btn">评价 </a></td>
-	      <td rowspan="1" class="center" width="13%">
-	        <ul class="unstyled">
-	          <li><a href="#">删除</a></li>
-	          <li><a href="#">标记</a></li>
-	          <li><a href="#">分享</a></li>
-	        </ul>
-	      </td>
-	    </tr>
-	    <tr>
-	      <td width="50%">
-	        <div class="typographic"><img style="width:50px;height:50px;" src="http://img03.tbsandbox.com/bao/uploaded/i3/TB10GGKXXXXXXalXXXXXXXXXXXX_!!0-item_pic.jpg_50x50.jpg"><a href="#" class="block-text" style="width:200px;">包邮 正品玛姬儿压缩面膜无纺布纸膜100粒 送泡瓶面膜刷喷瓶 新款</a><span>1</span>
-	        </div>
-	      </td>
-	      <td rowspan="1" class="center" width="11%">56.50</td>
-	      <td rowspan="1" class="center" width="13%">
-	        <ul class="unstyled">
-	          <li>交易成功</li>
-	          <li><a href="#">订单详情</a></li>
-	          <li><a href="#">对方已评</a></li>
-	        </ul>
-	      </td>
-	      <td rowspan="1" class="center" width="13%"><a href="#" class="btn">评价 </a></td>
-	      <td rowspan="1" class="center" width="13%">
-	        <ul class="unstyled">
-	          <li><a href="#">删除</a></li>
-	          <li><a href="#">标记</a></li>
-	          <li><a href="#">分享</a></li>
-	        </ul>
-	      </td>
-	    </tr>
-	  </tbody>
-	</table>
-</div>
-<!-- end of #content -->
+	<!-- end of #content -->
