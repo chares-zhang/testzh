@@ -25,6 +25,7 @@ class Response {
 	 
 	public function setOutput($output) {
 		$this->output = $output;
+		return $this;
 	}
 	 
 	public function sendResponse() {
@@ -36,6 +37,12 @@ class Response {
 			}
 		}
 		echo $ouput;
+	}
+	
+	public function toJson()
+	{
+		$this->output = json_encode($this->output);
+		return $this;
 	}
 	
 }

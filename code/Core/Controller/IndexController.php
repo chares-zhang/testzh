@@ -35,7 +35,7 @@ class Core_IndexController extends Core_BaseController
 // 		include $this->template('index');
 	}
 	
-	public function logout()
+	public function logoutAction()
 	{
 		Access_Model_Taobao_Session::getInstance()->destroy();
 	}
@@ -53,6 +53,7 @@ class Core_IndexController extends Core_BaseController
 			1=>array('num_iid'=>88,'price'=>'88.88'),
 		);
 		$response->setOutput($output);
+		$response->toJson();
 		$response->sendResponse();
 	}
 	

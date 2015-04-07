@@ -174,7 +174,11 @@ class Access_Model_Taobao_Access
 	}
 	
 	
-	//从平台获取登陆信息
+	/**
+	 * 从平台获取登陆信息
+	 * @param unknown $code
+	 * @return mixed
+	 */
 	public static function getLoginUserInfo($code)
 	{
 		$baseUrl = Common::getBaseUrl();

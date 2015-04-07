@@ -51,4 +51,12 @@ gitlab搭建
 未完成:本地访问欢乐逛
 02-28
 决定：前端是否支持ie6，前端样式框架，前端js框架
+03-23
+结论：前端只支持到ie8，前端样式框架使用sui，配合自己的框架，前端js框架knockout。
+
+
+Cannot open the disk 'F:\sys\CentOS5.8 64-bit test01\CentOS5.8 64-bit test01.vmdk' or one of the snapshot disks it depends on.
+
+Reason: Failed to lock the file.
+
 

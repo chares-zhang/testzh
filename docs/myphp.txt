@@ -1,0 +1,93 @@
+
+myphp框架
+
+1.路由->controllers
+     1.1 自动加载类 (加载Controllers和Models)
+     1.2 Controller分层
+          a.继承关系：
+               AbstractController ->  模块名/xxxController 
+               各个模块可以各自有自己的BaseController
+          b.目录结构：
+               library/AbstractController
+               模块名/BaseController(可选) extends AbstracController
+               模块名/xxxCrontroller extends AbstractController or extends 模块名_BaseController
+          c.类名命名规范：
+               模块名(首字母大写)_xxxCrontroller extend Core_BaseController
+          
+     1.3 Models 分层 （基础类）
+          AbstractModel -> 模块名/Base/xxxxModel（表的基本操作，底层model） -> 模块名/xxxModel（表相关的逻辑操作->将来发展为api层，上层model）
+     1.4 Block模块
+     1.5 Layout机制：
+          controller中，loadLayout，将html内容存储在html中。
+          sendResponse的时候，输出html，获取当前controller中的html，与一起输出。
+          
+          
+2.controller->template
+3.models  每个model中的表的基本操作，根据表的特性（1-1,1-N,N-N）用代码生成器生成基本代码。
+     
+4.公共模块
+     4.1 用户系统（涉及表 User,Session ）：置于Core模块中。
+          4.1.1 单点登陆：游戏，应用，网站 -> 单点登陆
+          4.1.2 多点登陆：淘宝应用。
+          
+          默认controller：core/index/index
+          访问controller：先过BaseController的构造函数，函数中实现以下逻辑：
+          1.获取uid
+          Access_Model_Factory::factory($platName)->getLoginUid()
+          if (已经登陆) {
+     //获取uid
+} else {
+     //登陆流程:1.新用户登陆，添加user表；2.老用户登陆，更新user表   Access_Model_Factory::factory($platName)->access();   access:     1.授权登陆，获取平台用户信息·     2.新用户添加user表；老用户更新user表     3.session设置完成登陆     4.返回uid     }
+
+ 
+
+     4.2 平台相关逻辑(1.获取用户信息，授权登陆)
+
+
+
+5.文件职能：
+	controller，response返回前的数据拼装，目录标签设置。
+	底层model，负责让每个表的每个基础操作都有统一的入口和出口。
+	上层model，负责处理controller过来的逻辑，与数据库的交互，通过底层model来完成。
+	引入block的好处:
+		1.参数清晰，便于传入参数的验证。
+		2.直接与上层model交互，构造视图模板中需要的数据集。
+		3.便于模板化。
+          
+	职责:
+	引入response的好处：
+		1.可以分别对待普通输出 和 异步json输出。
+		2.可以方便控制http头信息。
+	公共数据：
+		1.用户信息，放到Common类中去获取。
+     
+     
+	在controller中
+	同步返回的方法：
+	$this->getBlockInstance();
+	$this->getResponse()->sendResponse(); 或 $this->getResponse()->getAsyncResponse();
+
+
+	异步处理：
+		$response = $this->getAsyncResponse();
+		$output = $data;
+		$response->setOutput($output);
+		$response->sendResponse();
+
+	异步返回格式：
+     {
+    "status": 0,
+    "result": {
+        "total_result": 150,
+        "list": [
+            {
+                "data_field1": "val1",
+                "data_field2": "val2"
+            },
+            {
+                "data_field1": "val1",
+                "data_field2": "val2"
+            }
+        ]
+    }
+}

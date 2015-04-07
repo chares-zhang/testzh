@@ -76,20 +76,19 @@ $(document).ready(function() {
 	});
 	
 	
-	var bodyId = $("body").attr("id");
-	switch(bodyId){
-		case 'tools_mobiledetail_index':
-			var mobliledetailViewModel = function() {
-				var self = this;
-				
-				
-			};
-			
-			ko.
-			
-			break;
-	
-	}
+//	var bodyId = $("body").attr("id");
+//	switch(bodyId){
+//		case 'tools_mobiledetail_index':
+//			var mobliledetailViewModel = function() {
+//				var self = this;
+//				
+//				
+//			};
+//			
+//			
+//			break;
+//	
+//	}
 	
 
 });

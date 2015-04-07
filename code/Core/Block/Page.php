@@ -19,5 +19,11 @@ class Core_Block_Page extends Core_Block_Template
 		$bodyId = $this->module . '_' . $this->controller . '_' . $this->action;
 		return $bodyId;
 	}
-	
+
+	public function getUserName()
+	{
+		$userInfo = Common::getUserInfo();
+		$userName = $userInfo['username'];
+		return $userName;
+	}
 }

@@ -107,11 +107,40 @@ h1{
 }
 /**  #header  **/
 #header{
-	width:100%;
 	background:#485B7F;
 	height:50px;
 	line-height:50px;
 	min-width:1200;
+	width:100%;
+}
+#header-box{
+	width:1200px;
+	margin:0 auto;
+}
+#logo{
+	width:190px;
+	position:relative;
+	display:inline;
+}
+#header-menu{
+	float:right;
+	
+}
+#header-menu li{
+	float:left;
+	height:50px;
+	line-height:50px;
+	margin-left:10px;
+	color:#fff;
+}
+#header-menu li a{
+	color:#fff;
+	text-decoration: none;
+}
+#header-menu li a:hover{
+	font-weight:bold;
+	color:#fff;
+	text-decoration: none;
 }
 
 #wrap{
@@ -124,7 +153,7 @@ h1{
 #container{
 	margin-top:10px;
     position: relative;
-    width: 1190px;
+    width: 1200px;
     z-index: 18;
 }
 
@@ -221,7 +250,7 @@ h1{
 	margin-left: auto;
     min-height: 748px;
 	padding-left:10px;
-    width: 988px;
+    width: 998px;
 }
 .box-title{
 	padding:7px 0;

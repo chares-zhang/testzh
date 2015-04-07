@@ -2,9 +2,9 @@
 
 class Core_Block_Template extends My_Block 
 {
-	protected $module;
-	protected $controller;
-	protected $action;
+// 	protected $module;
+// 	protected $controller;
+// 	protected $action;
 	protected $template;
 	
 	/**

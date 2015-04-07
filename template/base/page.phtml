@@ -31,8 +31,14 @@
 <body id="<?php echo $this->getBodyId();?>">
 <!-- #header -->
 <div id="header">
-	<div id="logo">
-		<a href="#"><img alt="大掌柜_自动橱窗" src="<?php echo $this->getStaticUrl();?>/i/logo.png" /></a>
+	<div id="header-box">
+		<div id="logo">
+			<a href="#"><img alt="大掌柜_自动橱窗" src="<?php echo $this->getStaticUrl();?>/i/logo.png" /></a>
+		</div>
+		<ul id="header-menu">
+			<li><span><?php echo "您好，".$this->getUserName();?></span></li>
+			<li><a href="<?php echo Common::getUrl('core/index/logout');?>">[退出]</a></li>
+		</ul>
 	</div>
 </div>
 <!-- end of #header -->
@@ -50,5 +56,17 @@
 	<div class="copyright">© 2013 xxxx 版权所有</div>
 </div>
 <!-- end of #footer -->
+<script  type="text/javascript">
+    var baseUrl = "<?php echo Common::getBaseUrl();?>";
+	<?php 
+		$moduleJs = Util::factory("js")->getJsUrl();
+		if (!empty($moduleJs)){
+	?>
+	//head.js("<?php echo  $this->getStaticUrl().'/js/'.$moduleJs;?>");
+	head.load("http://testzh.testzh.com/static/js/tools/mobiledetail/index.js");
+	<?php 
+		}
+	?>
+</script>
 </body>
 </html>

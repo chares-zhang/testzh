@@ -12,6 +12,7 @@ define('TEMPLATE_PATH', APP_PATH . DS . 'template');
 
 $paths[] = LIBRARY_PATH;
 $paths[] = LIBRARY_PATH . DS . 'My';
+$paths[] = LIBRARY_PATH . DS . 'Util';
 $paths[] = LIBRARY_PATH . DS . 'top';
 $paths[] = LIBRARY_PATH . DS . 'top' . DS . 'request';
 $paths[] = CODE_PATH;
