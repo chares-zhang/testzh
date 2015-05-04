@@ -1,22 +1,23 @@
 <?php
 /**
- * 用户表基本操作
+ * 错误日志表基本操作
  * 是否分表：N
- * 关系类型：1-1
+ * @TODO 要改成按周分表
+ * 关系类型：1-N
  * @author chares
  *
  */
-class Access_Model_Base_User extends AbstractModel
+class Core_Model_Base_Error_Log extends AbstractModel
 {
 	/**
 	 * 表名
 	 */
-	protected $_name = 'access_user';
+	protected $_name = 'core_error_log';
 	
 	/**
 	 * 模块名
 	 */
-	protected $_module = 'access';
+	protected $_module = 'core';
 	
 	/**
 	 * 是否为公共库,默认false.
@@ -36,7 +37,7 @@ class Access_Model_Base_User extends AbstractModel
 	/**
 	 * 主键id
 	 */
-	protected $_primaryKey = 'uid';
+	protected $_primaryKey = 'log_id';
 	
 	/**
 	 * 是否使用缓存
@@ -46,46 +47,36 @@ class Access_Model_Base_User extends AbstractModel
 	/**
 	 * 通过主键获取单个用户
 	 */
-	public function getUserRow($uid)
+	public function getErrorLogRow($logId)
 	{
-		return $this->load($uid);
+		return $this->load($logId);
 	}
 	
 	/**
-	 * 通过用户名获取单个用户
+	 * 通过where条件,获取多条记录
 	 */
-	public function getUserRowByName($username)
+	public function getErrorLogRows($where,$field=null)
 	{
-		return $this->load($username,'username');
+		$params = array();
+		if (!empty($field)) {
+			$params['field'] = $field;
+		}
+		$params['where'] = $where;
+		$rows = $this->fetchItems($params);
+		return $rows;
 	}
 	
 	/**
-	 * 新增用户
-	 * 新增单条记录
+	 * 新增单条
 	 * @param array $data
 	 * @return boolean
 	 */
-	public function addUserRow($data)
+	public function addErrorLogRow($data)
 	{
 		$data['my_created'] = date('Y-m-d H:i:s');
 		$data['my_updated'] = date('Y-m-d H:i:s');
 		$res = $this->insertItem($data);
 		return $res ? true : false;
 	}
-
-	/**
-	 * 更新用户信息
-	 * 更新单条记录
-	 * @param unknown $data
-	 * @param unknown $uid
-	 */
-	public function updateUserRow($data,$uid)
-	{
-		$data['my_updated'] = date('Y-m-d H:i:s');
-		$where = "uid = '{$uid}'";
-		$this->updateItem($data, $where);
-		return $uid;
-	}
-	
 	
 }

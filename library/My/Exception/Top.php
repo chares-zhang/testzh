@@ -1,5 +1,5 @@
 <?php
-class TopClient
+class Exception_Top
 {
 	public $appkey;
 
@@ -7,7 +7,7 @@ class TopClient
 
 	public $gatewayUrl = "http://gw.api.taobao.com/router/rest";
 
-	public $format = "json";
+	public $format = "xml";
 
 	/** 是否打开入参check**/
 	public $checkRequest = true;

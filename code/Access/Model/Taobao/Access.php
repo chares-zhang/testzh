@@ -136,7 +136,7 @@ class Access_Model_Taobao_Access
 		$accessToken   = $result['access_token'];
 		
 		$accessUserM = Common::getPlatModel('access/user');
-		$userRow = $accessUserM->getUserItemByName($tbUserNick);
+		$userRow = $accessUserM->getUserRowByName($tbUserNick);
 		if (empty($userRow)) {//新增用户
 			$userRow = array(
 					'username' => $tbUserNick,
@@ -151,7 +151,7 @@ class Access_Model_Taobao_Access
 					'version_no' => '1',
 					'last_login' => date('Y-m-d H:i:s'),
 			);
-			$uid = $accessUserM->addUserItem($userRow);
+			$uid = $accessUserM->addUserRow($userRow);
 		} else {//老用户更新.
 			if (!empty($tbUserNick)) {
 				$userRow['username'] = $tbUserNick;
@@ -166,8 +166,7 @@ class Access_Model_Taobao_Access
 			$userRow['re_expired'] = $reExpired;
 			$userRow['refresh_token'] = $refreshToken;
 			$uid = $userRow['uid'];
-			$where = "uid = '{$uid}'";
-			$res = $accessUserM->updateUserItem($userRow,$where);
+			$res = $accessUserM->updateUserRow($userRow,$uid);
 		}
 		//完成登录.
 		$this->_doLogin($uid);
@@ -201,9 +200,12 @@ class Access_Model_Taobao_Access
 		$data = array(
 			'uid'=>$uid,
 		);
+		if (isset($_SESSION)) {
+			Access_Model_Taobao_Session::getInstance()->destroy();
+		}
 		Access_Model_Taobao_Session::getInstance()->start($data);
 		$cookieInfo = Common::getCookieInfo();
-		Core_Model_Cookie::set('uid', $uid, time() + 3600, '/', $cookieInfo['domain']);
+		Core_Model_Cookie::set('uid', $uid, $cookieInfo['expire'], '/', $cookieInfo['domain']);
 	}
 	
 	private function _doLogout()

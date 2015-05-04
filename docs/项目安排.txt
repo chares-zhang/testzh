@@ -39,6 +39,14 @@ model cache
 
 
 
+====
+基础组件：
+1.异步加载分页列表显示。空数据、加载中的处理。
+
+
+====
+待完善：
+1.按店铺分类查宝贝。
 
 ====
 【每日计划】
@@ -53,10 +61,11 @@ gitlab搭建
 决定：前端是否支持ie6，前端样式框架，前端js框架
 03-23
 结论：前端只支持到ie8，前端样式框架使用sui，配合自己的框架，前端js框架knockout。
-
-
-Cannot open the disk 'F:\sys\CentOS5.8 64-bit test01\CentOS5.8 64-bit test01.vmdk' or one of the snapshot disks it depends on.
-
-Reason: Failed to lock the file.
-
-
+05-01
+手机详情后端接口
+rabbitmq安装
+异步机制基础类建立
+05-02
+手机详情前后端收尾
+05-03
+自动橱窗 - 产品规划+基础接口确定

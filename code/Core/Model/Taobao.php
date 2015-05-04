@@ -13,6 +13,115 @@ class Core_Model_Taobao extends TopClient
 		$this->gatewayUrl = Common::getGatewayUrl();
 	}
 	
+	public function execute($request, $session = null)
+	{
+		if($this->checkRequest) {
+			try {
+				$request->check();
+			} catch (Exception $e) {
+				$result->code = $e->getCode();
+				$result->msg = $e->getMessage();
+				return ;
+			}
+		}
+		//组装系统参数
+		$sysParams["app_key"] = $this->appkey;
+		$sysParams["v"] = $this->apiVersion;
+		$sysParams["format"] = $this->format;
+		$sysParams["sign_method"] = $this->signMethod;
+		$sysParams["method"] = $request->getApiMethodName();
+		$sysParams["timestamp"] = date("Y-m-d H:i:s");
+		$sysParams["partner_id"] = $this->sdkVersion;
+		if (null != $session) {
+			$sysParams["session"] = $session;
+		}
+		
+		//获取业务参数
+		$apiParams = $request->getApiParas();
+		//签名
+		$sysParams["sign"] = $this->generateSign(array_merge($apiParams, $sysParams));
+		
+		//系统参数放入GET请求串
+		$requestUrl = $this->gatewayUrl . "?";
+		foreach ($sysParams as $sysParamKey => $sysParamValue) {
+			$requestUrl .= "$sysParamKey=" . urlencode($sysParamValue) . "&";
+		}
+		$requestUrl = substr($requestUrl, 0, -1);
+		
+		//发起HTTP请求
+		try {
+			$resp = $this->curl($requestUrl, $apiParams);
+		} catch (Exception $e) {
+// 			$this->logCommunicationError($sysParams["method"],$requestUrl,"HTTP_ERROR_" . $e->getCode(),$e->getMessage());
+			$apiParamsJson = json_encode($apiParams);
+			
+			$te = new Top_Exception;
+			$te->setErrorType('HTTP_ERROR');
+			$te->setTbCode($e->getCode());
+			$te->setTbMsg('HTTP_ERROR_'.$e->getMessage());
+			$te->setApiMethod($sysParams['method']);
+			$te->setRequestUrl($requestUrl);
+			$te->setApiParams($apiParamsJson);
+			throw $te;
+		}
+		
+		//解析TOP返回结果
+		$respWellFormed = false;
+		if ("json" == $this->format) {
+			$respObject = json_decode($resp);
+			if (null !== $respObject) {
+				$respWellFormed = true;
+				foreach ($respObject as $propKey => $propValue) {
+					$respObject = $propValue;
+				}
+			}
+		} else if("xml" == $this->format) {
+			$respObject = @simplexml_load_string($resp);
+			if (false !== $respObject) {
+				$respWellFormed = true;
+			}
+		}
+		
+		//返回的HTTP文本不是标准JSON或者XML，记下错误日志
+		if (false === $respWellFormed) {
+			$apiParamsJson = json_encode($apiParams);
+			$tbResp = json_encode($respObject);
+			
+			$te = new Top_Exception;
+			$te->setErrorType('FORMAT_ERROR');
+			$te->setTbCode($e->getCode());
+			$te->setTbMsg('HTTP_ERROR_'.$e->getMessage());
+			$te->setApiMethod($sysParams['method']);
+			$te->setRequestUrl($requestUrl);
+			$te->setApiParams($apiParamsJson);
+			$te->setTbResp($resp);
+			
+		}
+		
+		//如果TOP返回了错误码，记录到业务错误日志中
+		if (isset($respObject->code)) {
+			$apiParamsJson = json_encode($apiParams);
+			$tbResp = json_encode($respObject);
+			
+			$te = new Top_Exception;
+			$te->setErrorType('API_ERROR');
+			$code = isset($respObject->code) ? (string)$respObject->code : '';
+			$msg = isset($respObject->msg) ? (string)$respObject->msg : '';
+			$subCode = isset($respObject->sub_code) ? (string)$respObject->sub_code : '';
+			$subMsg = isset($respObject->sub_msg) ? (string)$respObject->sub_msg : '';
+			$te->setTbCode($code);
+			$te->setTbMsg($msg);
+			$te->setSubCode($subCode);
+			$te->setSubMsg($subMsg);
+			$te->setApiMethod($sysParams['method']);
+			$te->setRequestUrl($requestUrl);
+			$te->setApiParams($apiParamsJson);
+			$te->setTbResp($tbResp);
+			throw $te;
+		}
+		
+		return $respObject;
+	}
 	/**
 	 *  重写TopClient::execute方法
 	 *

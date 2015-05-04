@@ -1,22 +1,22 @@
 <?php
 /**
- * 用户表基本操作
+ * 手机详情宝贝表
  * 是否分表：N
- * 关系类型：1-1
+ * 关系类型：1-N
  * @author chares
  *
  */
-class Access_Model_Base_User extends AbstractModel
+class Tools_Model_Mobiledetail_Item extends AbstractModel
 {
 	/**
 	 * 表名
 	 */
-	protected $_name = 'access_user';
+	protected $_name = 'tools_mobiledetail_item';
 	
 	/**
 	 * 模块名
 	 */
-	protected $_module = 'access';
+	protected $_module = 'tools';
 	
 	/**
 	 * 是否为公共库,默认false.
@@ -26,7 +26,7 @@ class Access_Model_Base_User extends AbstractModel
 	/**
 	 * 分表数量,若数量大于1,则表示需要分表,$_tableDivType='UID'时有用.
 	 */
-	protected $_tableDiv;
+	protected $_tableDiv = 100;
 	
 	/**
 	 * 分表依据,只支持按 UID,MONTH,WEEK 分表,默认UID
@@ -46,17 +46,9 @@ class Access_Model_Base_User extends AbstractModel
 	/**
 	 * 通过主键获取单个用户
 	 */
-	public function getUserRow($uid)
+	public function getMobiledetailItemRow($id)
 	{
-		return $this->load($uid);
-	}
-	
-	/**
-	 * 通过用户名获取单个用户
-	 */
-	public function getUserRowByName($username)
-	{
-		return $this->load($username,'username');
+		return $this->load($id);
 	}
 	
 	/**
@@ -65,7 +57,7 @@ class Access_Model_Base_User extends AbstractModel
 	 * @param array $data
 	 * @return boolean
 	 */
-	public function addUserRow($data)
+	public function addMobiledetailItemRow($data)
 	{
 		$data['my_created'] = date('Y-m-d H:i:s');
 		$data['my_updated'] = date('Y-m-d H:i:s');
@@ -79,7 +71,7 @@ class Access_Model_Base_User extends AbstractModel
 	 * @param unknown $data
 	 * @param unknown $uid
 	 */
-	public function updateUserRow($data,$uid)
+	public function updateMobiledetailItemRow($data,$uid)
 	{
 		$data['my_updated'] = date('Y-m-d H:i:s');
 		$where = "uid = '{$uid}'";

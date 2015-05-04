@@ -30,7 +30,7 @@ class Core_IndexController extends Core_BaseController
 		
 // 		$uid = 1;
 // 		$userM = Common::getPlatModel('Access/user');
-// 		$userRow = $userM->getUserItem($uid);
+// 		$userRow = $userM->getUserRow($uid);
 // 		var_dump($userRow);exit;
 // 		include $this->template('index');
 	}
@@ -38,6 +38,7 @@ class Core_IndexController extends Core_BaseController
 	public function logoutAction()
 	{
 		Access_Model_Taobao_Session::getInstance()->destroy();
+		$this->redirect('core/index/index');
 	}
 
 	public function syncAction()

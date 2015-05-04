@@ -4,6 +4,7 @@ abstract class AbstractController {
     protected $module;
     protected $controller;
     protected $action;
+    protected $params;
     
     public $block;
     public $layout;
@@ -13,6 +14,18 @@ abstract class AbstractController {
         $this->module = Dispatcher::getInstance()->getModule();
         $this->controller = Dispatcher::getInstance()->getController();
         $this->action = Dispatcher::getInstance()->getAction();
+    }
+    
+    public function getParams()
+    {
+    	$params = Dispatcher::getInstance()->getParams();
+    	return $params;
+    }
+    
+    public function getParam($name,$default)
+    {
+    	$param = Dispatcher::getInstance()->getParam($name,$default);
+    	return $param;
     }
     
     public function loadLayout($blockName = null)
@@ -46,14 +59,14 @@ abstract class AbstractController {
     
     public function getResponse()
     {
-        $response = new Response();
+        $response = Response::getInstance();
         return $response;
     }
     
     public function getAsyncResponse()
     {
-        $response = new Response();
-        $response->addHeader('Content-Type','application/json');
+        $response = Response::getInstance();
+        Response::getInstance()->addHeader('Content-Type','application/json');
         return $response;
     }
     

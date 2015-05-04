@@ -191,6 +191,7 @@ h1{
 	border-top:#F2F3F6 1px solid;
 	cursor: pointer;
 	overflow:hidden;
+	text-decoration:none;
 	/*border:#FFFFFF 1px solid;*/
 }
 #menu a.nav .nav-left{
@@ -221,6 +222,7 @@ h1{
 	color:#07BEED;
 	width:177px;
 	border-left:#07BEED 3px solid;
+	text-decoration:none;
 }
 #menu ul.navBox li a.subNav{
 	text-align:center;
@@ -251,6 +253,9 @@ h1{
     min-height: 748px;
 	padding-left:10px;
     width: 998px;
+}
+#main{
+    width: 988px;
 }
 .box-title{
 	padding:7px 0;

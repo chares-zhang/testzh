@@ -401,12 +401,109 @@ class Common{
 	}
 	
 	/**
+	 * 记录普通程序错误日志
+	 * @param unknown $message
+	 * @param unknown $keyword
+	 * @param unknown $params
+	 * $params = array (
+	 * 		'uid' => $uid,
+	 * 		'keyword' => $keyword,
+	 * )
+	 */
+	public static function logException($message,$params=array())
+	{
+		$errorLogM = Common::getModel('core/error_log');
+		if (!is_string($message)) {
+			try{
+				$message = $message->__toString();
+			}catch (Exception $e){
+				$message = var_export($message,true);
+			}
+		}
+		if (empty($message)) {
+			return ;
+		}
+		
+		$uid = isset($params['uid']) ? $params['uid'] : 0;
+		$keyword = isset($params['keyword']) ? $params['keyword'] : 'default';
+		$data = array(
+			'uid' => $uid,
+			'message' => $message,
+			'keyword' => $keyword,
+			'uri' => $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],
+			'query_string' => var_export($_REQUEST,true),
+		);
+		
+		return $errorLogM->addErrorLogRow($data);
+	}
+	
+	/**
+	 * 记录淘宝api错误日志
+	 * @param unknown $errorMsg
+	 * @param unknown $apiMethod
+	 * @param unknown $requestUrl
+	 */
+	public static function logApiError($tbResp,$apiMethod,$requestUrl,$apiParams,$params)
+	{
+		$errorApilogM = Common::getModel('core/error_apilog');
+		if (empty($tbResp)) {
+			return ;
+		}
+		$code = $msg = $subCode = $subMsg = '';
+		$tbRespArr = json_decode($tbResp,true);
+		if (!empty($tbRespArr)) {
+			$code = isset($tbRespArr['code']) ? $tbRespArr['code'] : '';
+			$msg = isset($tbRespArr['msg']) ? $tbRespArr['msg'] : '';
+			$subCode = isset($tbRespArr['sub_code']) ? $tbRespArr['sub_code'] : '';
+			$subMsg = isset($tbRespArr['sub_msg']) ? $tbRespArr['sub_msg'] : '';
+		}
+		
+		$uid = isset($params['uid']) ? $params['uid'] : 0;
+		$keyword = isset($params['keyword']) ? $params['keyword'] : 'default';
+		
+		$data = array(
+			'uid' => $uid,
+			'keyword' => $keyword,
+			'api_method' => $apiMethod,
+			'request_url' => $requestUrl,
+			'api_params' => $apiParams,
+			'tb_resp' => $tbResp,
+			'code' => $code,
+			'msg' => $msg,
+			'sub_code' => $subCode,
+			'sub_msg' => $subMsg,
+		);
+		
+		return $errorApilogM->addErrorApiLogRow($data);
+	}
+	
+	public static function getResponse()
+    {
+        $response = Response::getInstance();
+        return $response;
+    }
+    
+    public static function getAsyncResponse()
+    {
+        $response = Response::getInstance();
+        $response->addHeader('Content-Type','application/json');
+        return $response;
+    }
+	
+    public static function responseError($msg)
+    {
+    	$response = self::getAsyncResponse();
+		$response->setError($msg);  
+		$response->sendResponse($response->toJson());
+    }
+    
+	/**
 	 * @TODO 未仔细斟酌
 	 * @param string $url
 	 * @param array  $data
 	 * @return mixed
 	 */
-	static public function post($url, $params)
+	public static function post($url, $params)
 	{
 		$str = '';
 		foreach ($params as $k=>$v) {

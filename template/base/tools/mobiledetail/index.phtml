@@ -1,6 +1,6 @@
 <!-- #content -->
 <div id="content">
-	<div style="width: 998px;">
+	<div id="main">
 		<div class="">
 			<h1>
 				<ul class="sui-breadcrumb">
@@ -10,11 +10,10 @@
 			</h1>
 		</div>
 		<ul class="sui-nav nav-tabs nav-large">
-			<li class="active"><a data-toggle="tab" href="#demo3">出售中</a></li>
-			<li><a data-toggle="tab" href="#code3">仓库中</a></li>
-			<li><a data-toggle="tab" href="#doc3">已生成</a></li>
+			<li class="active"><a data-toggle="tab" data-bind="click:function(){search('ONSALE');}">出售中</a></li>
+			<li><a data-toggle="tab" data-bind="click:function(){search('INSTOCK');}">仓库中</a></li>
+			<li><a data-toggle="tab" >已生成</a></li>
 		</ul>
-
 		<div style="margin-top: -10px;" class="sui-form" id="deschide">
 			<span class="sui-dropdown dropdown-bordered dropdown-large select">
 				<span class="dropdown-inner">
@@ -30,17 +29,12 @@
 				</span>
 			</span>
 			<div class="input-control control-right">
-				<input style="margin-left: 5px; width: 150px;" class="input-fat" type="search" name="search1" id="osearchs1" value="" placeholder="商家编码" data-inline="true" onkeypress="event.keyCode==13?obbsearch():'';">
-					<i class="sui-icon icon-touch-magnifier"></i>
-			</div>
-			<div class="input-control control-right">
-				<input style="margin-left: 5px; width: 150px" class="input-fat" type="search" name="search" id="osearchs" value="" placeholder="宝贝关键词" data-inline="true" onkeypress="event.keyCode==13?obbsearch():'';">
+				<input style="margin-left: 5px; width: 180px" class="input-fat" type="search" name="q" id="q" value="" placeholder="关键字、商品链接、商品编码" data-inline="true" onkeypress="event.keyCode==13?mobiledetailM.search():'';">
 				<i class="sui-icon icon-touch-magnifier"></i>
 			</div>
-			<button style="margin-left: 15px;" class="sui-btn btn-primary btn-large" onclick="obbsearch()">搜索</button>
+			<button style="margin-left: 15px;" class="sui-btn btn-primary btn-large" data-bind="click:function(){ search();}">搜索</button>
 			<div id="page" style="display: inline-block; float: right;"></div>
 		</div>
-
 		<div class="ui-sortable">
 			<table class="sui-table table-bordered table-zebra ">
 				<thead>
@@ -53,93 +47,40 @@
 							</div>
 						</th>
 						<th style="width: 52px;">主图</th>
-						<th style="width: 40%;">标题</th>
-						<th></th>
-						<th>新的一列</th>
-						<th>新的一列</th>
+						<th style="">标题</th>
+						<th class="center" style="width: 90px;">状态</th>
+						<th class="center" style="width: 80px;">操作</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td>
-							<div class="center">
-								<label class="checkbox-pretty inline checked" data-toggle="checkbox">
-								<input type="checkbox" checked="checked"><span contenteditable="true"></span>
-								</label>
-							</div>
-						</td>
-						<td>
-							<div class="center">
-								<a href=""><img style="margin: 0; height:60px; width:60px;" alt="商品图片" src="http://img03.taobaocdn.com/bao/uploaded/i3/T1DgHZXmNdXXXgMAwT_012514.jpg_60x60.jpg"></a>
-		                	</div>
-		                </td>
-						<td>999</td>
-						<td>99999.00</td>
-						<td>99999.00</td>
-						<td>99999.00</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="center">
-								<label class="checkbox-pretty inline checked" data-toggle="checkbox">
-								<input type="checkbox" checked="checked"><span contenteditable="true"></span>
-								</label>
-							</div>
-						</td>
-						<td>9999.00</td>
-						<td>999</td>
-						<td>99999.00</td>
-						<td>99999.00</td>
-						<td>99999.00</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="center">
-								<label class="checkbox-pretty inline checked" data-toggle="checkbox">
-								<input type="checkbox" checked="checked"><span contenteditable="true"></span>
-								</label>
-							</div>
-						</td>
-						<td>9999.00</td>
-						<td>999</td>
-						<td>99999.00</td>
-						<td>99999.00</td>
-						<td>99999.00</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="center">
-								<label class="checkbox-pretty inline checked" data-toggle="checkbox">
-								<input type="checkbox" checked="checked"><span contenteditable="true"></span>
-								</label>
-							</div>
-						</td>
-						<td>9999.00</td>
-						<td>999</td>
-						<td>99999.00</td>
-						<td>99999.00</td>
-						<td>99999.00</td>
-					</tr>
+				<tbody data-bind="template: {name:'mobiledetailTpl', foreach: items}">
+					
 				</tbody>
 			</table>
 		</div>
-		
-		<div class="sui-pagination pagination-large center">
-			<ul>
-				<li class="prev disabled"><a href="#">«上一页</a></li>
-				<li class="active"><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li class="dotted"><span>...</span></li>
-				<li class="next"><a href="#">下一页»</a></li>
-			</ul>
-			<div><span>共10页&nbsp;</span><span>
-			到
-			<input class="page-num" type="text"><button class="page-confirm" onclick="alert(1)">确定</button>
-			页</span></div>
-		</div>
-
+		<div class="clear"></div>
+		<div class="my-page center" style="padding-bottom:1px; display:block;"></div>
 	</div>
-	<!-- end of #content -->
+</div>
+<!-- end of #content -->
+
+<script type="text/x-jquery-tmpl" id="mobiledetailTpl">
+<tr>
+    <td>
+        <div class="center">
+            <label class="checkbox-pretty inline checked" data-toggle="checkbox">
+            <input type="checkbox" checked="checked"><span contenteditable="true"></span>
+            </label>
+        </div>
+    </td>
+    <td>
+        <div class="center">
+            <a target='_blank' data-bind="attr: {href: 'http://item.taobao.com/item.htm?id='+num_iid}" ><img style="margin: 0; height:60px; width:60px;" data-bind="attr: {src: pic_url, title: title }"></a>
+        </div>
+    </td>
+    <td><a target='_blank' data-bind="text:title,attr: {href: 'http://item.taobao.com/item.htm?id='+num_iid}"></a></td>
+    <td class="center">
+		<span class="sui-label label-success">已生成</span>
+	</td>
+    <td class="center"><a href="javascript:void(0);" class="sui-btn btn-primary">生成图文</a></td>
+</tr>
+</script>

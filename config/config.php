@@ -35,14 +35,14 @@ return array(
 		'plat_name' => 'taobao',
 		'oauth_url' => 'https://oauth.taobao.com/authorize',
 		'token_url' => 'https://oauth.taobao.com/token',
-		'app_key' => '21585000',
-		'app_secret' => '9830fe6191583ea9dc977ab0a35b19ef',
+		'app_key' => '23102769',
+		'app_secret' => 'fb05721f337f3ef8a01df5f65a6a95d7',
 		'gateway_url' => 'http://gw.api.taobao.com/router/rest',
 
 		'sandbox_oauth_url' => 'https://oauth.tbsandbox.com/authorize',
 		'sandbox_token_url' => 'https://oauth.tbsandbox.com/token',
-		'sandbox_app_key' => '1021585000',
-		'sandbox_app_secret' => 'sandbox7cf7fe485ed1d5bdb006aa8d2',
+		'sandbox_app_key' => '1023102769',
+		'sandbox_app_secret' => 'sandboxf337f3ef8a01df5f65a6a95d7',
 		'sandbox_gateway_url' => 'http://gw.api.tbsandbox.com/router/rest',
 		
 		'is_sandbox' => true,

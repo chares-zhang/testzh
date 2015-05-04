@@ -21,6 +21,11 @@ class Dispatcher {
      * 请求的uri
      */
     protected static $_requestUri;
+    /**
+     * 请求的参数
+     * @var unknown
+     */
+    private $_params;
     
 
     public static function getInstance() {
@@ -90,7 +95,11 @@ class Dispatcher {
 			throw new Exception('no controller');
 		}
         $actionName = self::getAction().'Action';
-        $controllerObject->$actionName();
+        try {
+        	$controllerObject->$actionName();
+        } catch (Exception $e) {
+        	var_dump($e);
+        }
     }
 
     public function setModule($module)
@@ -119,4 +128,28 @@ class Dispatcher {
 	public function getAction(){
 		return self::$_action;
 	}
+	
+	public function getParams()
+	{
+		$inputData = json_decode(file_get_contents("php://input", "r"), true);
+		$request = $_REQUEST;
+		if(isset($inputData) && $inputData){
+			$request = array_merge($request,$inputData);
+		}
+		$this->_params = $request;
+		
+        return $this->_params;
+	}
+	
+	public function getParam($name, $default = null)
+	{
+		if (isset($this->_params[$name])) {
+			return $this->_params[$name];
+		} elseif (isset($_REQUEST[$name])) {
+			return $_REQUEST[$name];
+		}
+		
+		return $default;
+	}
+	
 }

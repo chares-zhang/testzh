@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
 	<title>test</title>
 	<meta name="keywords" content="">
@@ -8,7 +8,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<link href="http://g.alicdn.com/sj/dpl/1.4.3/css/sui.min.css" rel="stylesheet">
-	<link type="text/css" rel="stylesheet" href="<?php echo $this->getStaticUrl();?>/css/myui.css" media="all">
+	<!-- <link type="text/css" rel="stylesheet" href="<?php echo $this->getStaticUrl();?>/css/myui.css" media="all"> -->
 	<link type="text/css" rel="stylesheet" href="<?php echo $this->getStaticUrl();?>/css/main.css" media="all">
 	
 	<script type="text/javascript" src="<?php echo $this->getStaticUrl();?>/js/head.js"></script>
@@ -22,6 +22,7 @@
 		);
 	*/
     	head.js({libs: "<?php echo $this->getStaticUrl();?>/js/dzg_lib.min.js?ver=11"},
+    			"<?php echo $this->getStaticUrl();?>/js/knockout-3.3.0.js",
 	    		"<?php echo $this->getStaticUrl();?>/js/script.js",
 	    		"<?php echo $this->getStaticUrl();?>/js/myui.js",
 	    		"http://g.alicdn.com/sj/dpl/1.4.3/js/sui.min.js");
@@ -62,8 +63,8 @@
 		$moduleJs = Util::factory("js")->getJsUrl();
 		if (!empty($moduleJs)){
 	?>
-	//head.js("<?php echo  $this->getStaticUrl().'/js/'.$moduleJs;?>");
-	head.load("http://testzh.testzh.com/static/js/tools/mobiledetail/index.js");
+	head.js("<?php echo  $this->getStaticUrl().'/js/'.$moduleJs;?>");
+	//head.load("http://testzh.testzh.com/static/js/tools/mobiledetail/index.js");
 	<?php 
 		}
 	?>

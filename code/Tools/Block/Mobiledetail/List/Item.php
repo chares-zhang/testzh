@@ -4,17 +4,20 @@ class Tools_Block_Mobiledetail_List_Item extends Core_Block_Template
 {
 	private $_pageNum;
 	private $_pageSize;
+	public $data;
+	public $_totalRecords;
 	
 	public function __construct()
 	{
 		$this->_initParams();
-		$data = $this->loadData();
+		$this->data = $this->loadData();
 	}
 	
 	private function _initParams()
 	{
-		$this->_pageNum = isset($this->_pageNum) ? $this->_pageNum : 1;
-		$this->_pageSize = isset($this->_pageSize) ? $this->_pageSize : 10;
+		$params = Dispatcher::getInstance()->getParams();
+		$this->_pageNum = isset($params['page_num']) ? $params['page_num'] : 1;
+		$this->_pageSize = isset($params['page_size']) ? $params['page_size'] : 10;
 	}
 	
 	public function loadData()
@@ -57,13 +60,14 @@ class Tools_Block_Mobiledetail_List_Item extends Core_Block_Template
 		$req->setPageSize($pageSize);
 		$req->setPageNo($pageNum);
 		$req->setFields('num_iid,title,price,pic_url,outer_id,is_virtual,list_time,delist_time,111num,seller_cids,has_discount');
+
+		$items = array();
+		$userRow = Common::getUserInfo();
+		$tbSession = $userRow['access_token'];
+		$taobao->format = 'json';
 		try {
-			$userRow = Common::getUserInfo();
-			$tbSession = $userRow['access_token'];
-			$taobao->format = 'json';
-			$resp = $taobao->execute($req);
-// 			$resp = $taobao->execute($req, $tbSession);
-			var_dump($resp);exit;
+			$resp = $taobao->execute($req,$tbSession);
+			//调用成功
 			$this->_totalRecords = $resp->total_results;
 			if (isset($resp->item_search)) {
 				$tbData = $resp->item_search->items->item;
@@ -72,28 +76,30 @@ class Tools_Block_Mobiledetail_List_Item extends Core_Block_Template
 			} else {
 				return false;
 			}
-// 			foreach($tbData as $tbItem){
-// 				$item = array();
-// 				$item['num_iid'] = $tbItem->num_iid;
-// 				$item['outer_id'] = $tbItem->outer_id;
-// 				$item['pic_url'] = $tbItem->pic_url;
-// 				$item['title'] = $tbItem->title;
-// 				$item['price'] = $tbItem->price;
-// 				$items[] = $item;
-// 				$this->_tbData = $items;
-// 			}
-		} catch (Top_Exception $e) {//exit(var_dump($e));
-			var_dump(11,$e);exit;
-			Hlg::throwException($e);
+			if (!empty($tbData)) {
+				foreach($tbData as $tbItem){
+					$item = array();
+					$item['num_iid'] = $tbItem->num_iid;
+					$item['outer_id'] = $tbItem->outer_id;
+					$item['pic_url'] = $tbItem->pic_url;
+					$item['title'] = $tbItem->title;
+					$item['price'] = $tbItem->price;
+					$items[] = $item;
+				}
+			}
+			return $items;
+		} catch (Top_Exception $e) {
+			$msg = $e->getTbMsg();
+			Common::responseError($msg);
+			exit;
+// 			Common::throwException($e);
+// 			exit(var_dump($e));
+// 			var_dump(11,$e);exit;
+// 			Hlg::throwException($e);
 		} catch (Exception $e){
-			Hlg::throwException($e);
+			exit(var_dump($e));
+// 			Hlg::throwException($e);
 		}
-		
-		
-		
-		
-		
-		
 		
 // 		$taobao = Hlg::getModel('core/taobao');
 // 		$q = $params['q'];
@@ -203,6 +209,16 @@ class Tools_Block_Mobiledetail_List_Item extends Core_Block_Template
 // 			Hlg::throwException($e);
 // 		}
 		
+	}
+	
+	public function getTotalRecords()
+	{
+		return $this->_totalRecords;	
+	}
+	
+	public function getData()
+	{
+		return $this->data;
 	}
 	
 }

@@ -544,8 +544,8 @@ abstract class AbstractModel {
 	public function updateItem($data, $where){
 		//按UID分表的时候
 		if($this->_tableDivType == 'UID'){
-			if(isset($data['shop_id'])){
-				$divKey = $data['shop_id'];
+			if(isset($data['uid'])){
+				$divKey = $data['uid'];
 			}
 		}
 		if(!isset($divKey)){
